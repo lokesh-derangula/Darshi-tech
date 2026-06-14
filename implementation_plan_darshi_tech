@@ -1,0 +1,239 @@
+# DARSHI TECH - Implementation Plan
+
+DARSHI TECH is a modern, scalable, and secure educational and internship platform designed to connect students with internships, project catalogs, live classes, attendance tracking, and certificate generation. This document outlines the technical design, system architecture, database schema, security measures, and implementation steps.
+
+## System Architecture
+
+We will implement DARSHI TECH as a client-server web application in a monorepo structure:
+- **`frontend/`**: Vite + React + Tailwind CSS + Lucide Icons + React Router. It will feature a collapsible left sidebar, responsive design, dark-mode/modern glassmorphism aesthetics, and clean dashboards.
+- **`backend/`**: Node.js + Express.js + Prisma ORM + JWT + bcrypt. It will handle authentication, course catalogs, enrollment state, simulated payment validation, online class schedules, attendance, certificate generation with QR codes, and admin actions.
+- **Database**: PostgreSQL (via Prisma). For quick local development and zero-configuration testing, we will configure Prisma to use SQLite by default but provide a direct toggle/instructions to use PostgreSQL.
+
+---
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Database Configuration**:
+> We propose using **Prisma ORM**. By default, we will set it up with **SQLite** so that the application can run out-of-the-box without requiring a running PostgreSQL server on your machine. Switching to **PostgreSQL** is as simple as updating the `provider = "postgresql"` in `schema.prisma` and changing the `DATABASE_URL` in the `.env` file. Please let us know if you want PostgreSQL pre-configured as the active default instead.
+
+> [!WARNING]
+> **Payment Gateway (Razorpay)**:
+> Since this is a local development environment, we will build a mock Razorpay integration. It will simulate the Razorpay payment modal, verification signatures, and webhook updates. This allows testing the payment and enrollment flows seamlessly. If you have active Razorpay API keys, they can be configured in the `.env` file.
+
+---
+
+## Open Questions
+
+1. **Email Verification**:
+   - Would you like actual email verification using a service like NodeMailer (which requires SMTP details)?
+   - *Our Recommendation*: Implement a sandbox/development verification flow where verification codes are logged to the console/returned in the API response or displayed in a clean UI popup, while maintaining a fully functional verification route on the backend.
+2. **PostgreSQL Connection**:
+   - Do you have a PostgreSQL server running locally, or should we set up PostgreSQL instructions and run locally on SQLite for immediate execution?
+
+---
+
+## Database Schemas
+
+We will define the following schemas using Prisma:
+
+### Users Table
+```prisma
+model User {
+  id          String       @id @default(uuid())
+  name        String
+  email       String       @unique
+  phone       String
+  password    String       // Bcrypt hashed
+  college     String
+  branch      String
+  year        String
+  role        String       @default("STUDENT") // STUDENT, ADMIN
+  isVerified  Boolean      @default(false)
+  otpCode     String?      // For email verification and password reset
+  otpExpiry   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  enrollments Enrollment[]
+  attendance  Attendance[]
+}
+```
+
+### Courses / Catalog Table
+```prisma
+model Course {
+  id          String       @id @default(uuid())
+  title       String
+  description String
+  duration    String       // e.g., "6 Weeks"
+  price       Float
+  category    String       // Research, Full Stack, Product Development, Web Development, Workshops, Training
+  thumbnail   String       // Image URL or Base64 / Local Asset Path
+  status      String       @default("ACTIVE") // ACTIVE, DRAFT, ARCHIVED
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  enrollments Enrollment[]
+  classes     Class[]
+}
+```
+
+### Enrollments Table
+```prisma
+model Enrollment {
+  id         String   @id @default(uuid())
+  userId     String
+  courseId   String
+  paymentId  String   @unique
+  status     String   @default("ACTIVE") // PENDING, ACTIVE, COMPLETED
+  enrolledAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+```
+
+### Classes Table
+```prisma
+model Class {
+  id          String       @id @default(uuid())
+  courseId    String
+  meetingLink String
+  date        String       // YYYY-MM-DD
+  time        String       // HH:MM
+  title       String
+  createdAt   DateTime     @default(now())
+  course      Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  attendance  Attendance[]
+}
+```
+
+### Attendance Table
+```prisma
+model Attendance {
+  id        String   @id @default(uuid())
+  userId    String
+  classId   String
+  present   Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, classId])
+}
+```
+
+---
+
+## Proposed Changes
+
+We will create the directory `darshi-tech` under `scratch/`.
+
+### Directory Layout
+```text
+darshi-tech/
+├── package.json
+├── README.md
+├── frontend/
+│   ├── index.html
+│   ├── package.json
+│   ├── tailwind.config.js
+│   ├── src/
+│   │   ├── main.jsx
+│   │   ├── index.css
+│   │   ├── App.jsx
+│   │   ├── components/
+│   │   │   ├── Sidebar.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   └── ProtectedRoute.jsx
+│   │   ├── pages/
+│   │   │   ├── Home.jsx
+│   │   │   ├── ProductDevelopment.jsx
+│   │   │   ├── WebAppDevelopment.jsx
+│   │   │   ├── ResearchInternships.jsx
+│   │   │   ├── FullStackInternships.jsx
+│   │   │   ├── TrainingPlacements.jsx
+│   │   │   ├── JeeEapcetTraining.jsx
+│   │   │   ├── WorkshopsConferences.jsx
+│   │   │   ├── ContactUs.jsx
+│   │   │   ├── Auth/
+│   │   │   │   ├── Login.jsx
+│   │   │   │   ├── Register.jsx
+│   │   │   │   ├── VerifyEmail.jsx
+│   │   │   │   └── ForgotPassword.jsx
+│   │   │   ├── Dashboard/
+│   │   │   │   ├── StudentDashboard.jsx
+│   │   │   │   └── AdminDashboard.jsx
+│   │   │   └── EnrollmentPayment.jsx
+│   │   └── utils/
+│   │       └── api.js
+└── backend/
+    ├── package.json
+    ├── prisma/
+    │   └── schema.prisma
+    ├── src/
+    │   ├── server.js
+    │   ├── routes/
+    │   │   ├── auth.js
+    │   │   ├── courses.js
+    │   │   ├── enrollments.js
+    │   │   ├── classes.js
+    │   │   ├── certificates.js
+    │   │   └── admin.js
+    │   ├── middleware/
+    │   │   ├── auth.js
+    │   │   ├── rateLimiter.js
+    │   │   └── security.js
+    │   └── utils/
+    │       ├── pdfGenerator.js
+    │       └── qrGenerator.js
+    └── .env
+```
+
+### 1. Backend Security Architecture
+To defend against external threats, we will implement:
+- **SQL Injection Prevention**: Prisma ORM uses parameterized queries automatically.
+- **XSS (Cross-Site Scripting) Prevention**:
+  - Helmet middleware on the Express server to set secure HTTP headers.
+  - HTML sanitization for fields storing rich description markup.
+- **Brute Force Protection**:
+  - `express-rate-limit` to restrict requests on auth routes (login, registration, verification).
+- **JWT & Password Security**:
+  - Secure bcrypt password hashing (12 rounds).
+  - Short-lived JWT access tokens stored securely in client state, or HTTP-only cookie-based storage.
+- **Cross-Origin Resource Sharing (CORS)**: Controlled access with whitelist validation.
+
+### 2. Frontend Polish & Aesthetics
+We will craft a stunning interface using:
+- **Harmonious Sleek Palette**: Cool slate, vibrant deep indigo gradients, glassmorphism panel accents, clean dark-mode panels.
+- **Collapsible left sidebar**: Responsive sidebar featuring a compact mode (icon-only) and open mode, persisting sidebar state.
+- **Animations**: Framer Motion or smooth Tailwind CSS transition utility classes for sidebar toggles, card hovers, modal entry/exit, and progress bars.
+- **Interactive UI components**: Real-time validation feed, responsive forms, visual calendar grid for class schedules, custom dashboard stats cards, and simulated payment success animations.
+
+### 3. Certificate Generation & Verification
+- Server-side generation using `pdfkit`.
+- A unique QR code embedded in the PDF certificate generated dynamically via `qrcode`.
+- The QR code contains a validation URL (e.g., `http://localhost:5173/verify-certificate/:certId`). When scanned or opened, this page queries the backend and displays certificate validity, student name, and course details.
+
+---
+
+## Verification Plan
+
+### Automated Tests
+- Build verification: Run production build commands (`npm run build`) on both client and server to verify transpilation.
+- Security scan mock checks (SQL injection probes, password strength checks).
+
+### Manual Verification
+1. **User Registration & Flow**:
+   - Access sign-up page, create student account, retrieve the OTP code, verify email.
+   - Test login with valid and invalid credentials (verifying brute force blocking/rate limits).
+2. **Catalog & Course Enrollment**:
+   - Browse catalog sections.
+   - Click "Enroll" on a course -> Opens payment simulation modal.
+   - Complete checkout -> Verify enrollment creation.
+3. **Class Schedule & Attendance**:
+   - Join/launch class mock link.
+   - Admin page checks present status, marking attendance.
+4. **Certificate Flow**:
+   - Admin marks enrollment as "Completed".
+   - Student clicks "Download Certificate" in Student Portal -> Downloads signed PDF.
+   - Scan QR code/open verification page to verify validity.

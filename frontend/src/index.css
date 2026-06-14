@@ -1,0 +1,301 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-color: #05070a;
+  --bg-mesh-1: radial-gradient(circle at 10% 20%, rgba(13, 15, 21, 0.95) 0%, rgba(5, 7, 10, 0.98) 90%);
+  --bg-mesh-2: radial-gradient(circle at 90% 80%, rgba(20, 24, 33, 0.9) 0%, rgba(5, 7, 10, 0.98) 90%);
+  --text-serif: #c5a880;
+  --text-sans: #cbd5e1;
+  --text-description: #94a3b8;
+  --text-muted: #64748b;
+  --glass-bg: rgba(13, 15, 21, 0.65);
+  --glass-border: rgba(28, 32, 45, 0.65);
+  --glass-bg-premium: rgba(17, 20, 28, 0.75);
+  --glass-border-premium: #c5a880;
+  
+  --pill-bg: #11141c;
+  --pill-text: #c5a880;
+  --pill-border: #1c202d;
+  
+  --pill-sec-bg: #0f172a;
+  --pill-sec-text: #ffffff;
+  --pill-sec-border: #1c202d;
+  
+  --btn-bg: #c5a880;
+  --btn-text: #000000;
+  --btn-hover: #b5976f;
+  
+  --btn-outline-text: #c5a880;
+  --btn-outline-border: rgba(197, 168, 128, 0.4);
+  --btn-outline-hover-bg: rgba(197, 168, 128, 0.1);
+  
+  --scrollbar-track: #05070a;
+  --scrollbar-thumb: #1c202d;
+  --scrollbar-thumb-hover: #c5a880;
+  
+  --sidebar-bg: #0d0f15;
+  --sidebar-border: #1c202d;
+  --sidebar-hover-bg: #11141c;
+  --sidebar-text: #cbd5e1;
+  
+  --divider-color: #1c202d;
+  --text-card-title: #ffffff;
+  --banner-bg: #05070a;
+  --glow-color: rgba(197, 168, 128, 0.2);
+  --tree-line: rgba(197, 168, 128, 0.4);
+  --tree-accent: #c5a880;
+  --tree-bullet: rgba(197, 168, 128, 0.6);
+}
+
+.bright-theme {
+  --bg-color: #8c969a;
+  --bg-mesh-1: radial-gradient(circle at 10% 20%, rgba(140, 150, 154, 0.95) 0%, rgba(130, 140, 144, 0.98) 90%);
+  --bg-mesh-2: radial-gradient(circle at 90% 80%, rgba(150, 160, 164, 0.9) 0%, rgba(130, 140, 144, 0.98) 90%);
+  --text-serif: #1e2e30;
+  --text-sans: #1e2e30;
+  --text-description: #374151;
+  --text-muted: #000000;
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --glass-bg-premium: rgba(255, 255, 255, 0.75);
+  --glass-border-premium: #ffffff;
+  
+  --pill-bg: #ffffff;
+  --pill-text: #4b5563;
+  --pill-border: #e5e7eb;
+  
+  --pill-sec-bg: #ffffff;
+  --pill-sec-text: #1e2e30;
+  --pill-sec-border: #e5e7eb;
+  
+  --btn-bg: #1e2e30;
+  --btn-text: #ffffff;
+  --btn-hover: #2d4244;
+  
+  --btn-outline-text: #1e2e30;
+  --btn-outline-border: rgba(30, 46, 48, 0.4);
+  --btn-outline-hover-bg: rgba(30, 46, 48, 0.1);
+  
+  --scrollbar-track: #8c969a;
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-thumb-hover: #1e2e30;
+  
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #e5e7eb;
+  --sidebar-hover-bg: #f3f4f6;
+  --sidebar-text: #1e2e30;
+  
+  --divider-color: #e5e7eb;
+  --text-card-title: #1e2e30;
+  --banner-bg: linear-gradient(135deg, #101c1d 0%, #1e3537 100%);
+  --glow-color: rgba(255, 255, 255, 0.5);
+  --tree-line: #ffffff;
+  --tree-accent: #c5a880;
+  --tree-bullet: #ffffff;
+}
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-sans);
+    @apply antialiased overflow-x-hidden transition-colors duration-300;
+  }
+  h1, h2, h3, h4, h5, h6, .font-serif {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: var(--text-serif);
+    @apply tracking-wide transition-colors duration-300;
+  }
+}
+
+/* Luxury financial-tier scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Dark Obsidian Rounded Cards with gold glow hover lift */
+.glass-panel {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  @apply shadow-sm transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)];
+}
+
+.glass-panel:hover {
+  transform: translateY(-6px) scale(1.025);
+  border-color: var(--text-serif);
+  box-shadow: 0 15px 35px rgba(30, 46, 48, 0.08), 0 0 20px rgba(30, 46, 48, 0.03);
+}
+
+.glass-panel-premium {
+  background: var(--glass-bg-premium);
+  border: 2px solid var(--glass-border-premium);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  @apply shadow-md transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)];
+}
+
+.glass-panel-premium:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(30, 46, 48, 0.12), 0 0 25px rgba(30, 46, 48, 0.05);
+}
+
+/* Keyframes for Floating blobs */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-25px) scale(1.05) rotate(3deg);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0px) scale(1.05) rotate(0deg);
+  }
+  50% {
+    transform: translateY(25px) scale(1) rotate(-3deg);
+  }
+}
+
+@keyframes gradient-mesh {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-float-slow {
+  animation: float-slow 12s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 15s ease-in-out infinite;
+}
+
+/* Animated Dark Gradient Mesh Background */
+.bg-mesh {
+  background: var(--bg-mesh-1), var(--bg-mesh-2);
+  background-size: 200% 200%;
+  animation: gradient-mesh 20s ease infinite;
+  @apply transition-all duration-300;
+}
+
+/* Gold pill buttons matching image */
+.btn-gold, .btn-forest {
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  @apply font-semibold tracking-wide transition-all duration-300 text-xs px-5 py-2.5 rounded-full flex items-center justify-center gap-1.5 shadow-sm hover:shadow-md hover:scale-[1.03] active:scale-[0.98];
+}
+.btn-gold:hover, .btn-forest:hover {
+  background-color: var(--btn-hover);
+}
+
+.btn-outline-gold, .btn-outline-forest {
+  background-color: transparent;
+  color: var(--btn-outline-text);
+  border: 1px solid var(--btn-outline-border);
+  @apply font-semibold tracking-wide transition-all duration-300 text-xs px-5 py-2.5 rounded-full flex items-center justify-center gap-1.5 hover:scale-[1.03] active:scale-[0.98];
+}
+.btn-outline-gold:hover, .btn-outline-forest:hover {
+  background-color: var(--btn-outline-hover-bg);
+}
+
+/* Theme Adaptive Helper Utilities */
+.text-theme-title {
+  color: var(--text-serif);
+}
+.text-theme-body {
+  color: var(--text-sans);
+}
+.text-theme-desc {
+  color: var(--text-description);
+}
+.text-theme-card-title {
+  color: var(--text-card-title);
+}
+.text-theme-muted {
+  color: var(--text-muted);
+}
+.border-theme-border {
+  border-color: var(--glass-border);
+}
+.bg-theme-card {
+  background-color: var(--glass-bg);
+}
+.border-theme-divider {
+  border-color: var(--divider-color);
+}
+
+/* Theme Badge styling */
+.badge-theme {
+  background-color: var(--pill-bg);
+  color: var(--pill-text);
+  border-color: var(--pill-border);
+}
+.badge-theme-sec {
+  background-color: var(--pill-sec-bg);
+  color: var(--pill-sec-text);
+  border-color: var(--pill-sec-border);
+}
+
+.map-iframe {
+  filter: invert(90%) hue-rotate(180deg) brightness(0.85) contrast(1.1);
+  transition: filter 0.3s ease;
+}
+.bright-theme .map-iframe {
+  filter: none;
+}
+
+/* ── Three.js Globe CSS Refinements ── */
+#globeWrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: grab;
+}
+#globeWrapper:active {
+  cursor: grabbing;
+}
+#globeCanvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+#globeTooltip {
+  position: absolute;
+  background: rgba(10, 14, 30, 0.92);
+  border: 1.5px solid var(--text-serif);
+  color: #e0f0ff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 50;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px var(--glow-color);
+}
+
