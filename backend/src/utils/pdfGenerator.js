@@ -1,18 +1,20 @@
 import PDFDocument from 'pdfkit';
 import QRCode from 'qrcode';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
- * Generates a certificate PDF dynamically and pipes it to a writable stream.
+ * Generates an authentic certificate PDF matching the demo certificate layout.
  * @param {import('stream').Writable} writeStream - Express response or output stream.
- * @param {string} studentName - Name of the student.
- * @param {string} courseTitle - Name of the course or internship.
- * @param {string} duration - Duration of the course (e.g., "8 Weeks").
- * @param {string} certificateId - Unique database ID of the enrollment.
+ * @param {object} params - Parameters containing student and course completion details.
  */
-export const generateCertificatePDF = async (writeStream, studentName, courseTitle, duration, certificateId) => {
+export const generateCertificatePDF = async (writeStream, { studentName, courseTitle, domainName, startDate, endDate, certNo, issueDate, certificateId }) => {
   // Generate QR Code data URL for certificate verification
   const verificationUrl = `http://localhost:5173/verify-certificate/${certificateId}`;
-  const qrDataUrl = await QRCode.toDataURL(verificationUrl, { margin: 1, width: 150 });
+  const qrDataUrl = await QRCode.toDataURL(verificationUrl, { margin: 1, width: 100 });
 
   // Initialize a landscape A4 PDF document
   const doc = new PDFDocument({
@@ -23,104 +25,143 @@ export const generateCertificatePDF = async (writeStream, studentName, courseTit
 
   doc.pipe(writeStream);
 
-  // Outer primary border
-  doc.rect(20, 20, doc.page.width - 40, doc.page.height - 40)
-    .lineWidth(4)
-    .stroke('#1e3a8a'); // Deep navy blue
+  const pageWidth = doc.page.width;
+  const pageHeight = doc.page.height;
 
-  // Inner accent border
-  doc.rect(26, 26, doc.page.width - 52, doc.page.height - 52)
+  // 1. Double Borders (Matching the demo certificate layout)
+  // Outer thin blue border
+  doc.rect(15, 15, pageWidth - 30, pageHeight - 30)
     .lineWidth(1.5)
-    .stroke('#3b82f6'); // Vibrant light blue
+    .stroke('#0c3c60');
 
-  // Decorative corner accents (geometric lines)
-  const drawCornerAccent = (x, y, xDir, yDir) => {
-    doc.moveTo(x, y)
-      .lineTo(x + xDir * 30, y)
-      .lineTo(x + xDir * 30, y + yDir * 30)
-      .lineTo(x, y)
-      .fill('#1e3a8a');
-  };
-  // Top-Left
-  drawCornerAccent(28, 28, 1, 1);
-  // Top-Right
-  drawCornerAccent(doc.page.width - 28, 28, -1, 1);
-  // Bottom-Left
-  drawCornerAccent(28, doc.page.height - 28, 1, -1);
-  // Bottom-Right
-  drawCornerAccent(doc.page.width - 28, doc.page.height - 28, -1, -1);
+  // Thick blue border
+  doc.rect(23, 23, pageWidth - 46, pageHeight - 46)
+    .lineWidth(4)
+    .stroke('#0c3c60');
 
-  // Main Header Logo / Text
-  doc.font('Helvetica-Bold')
-    .fontSize(36)
-    .fillColor('#1e3a8a')
-    .text('DARSHI TECH', 0, 80, { align: 'center' });
-
-  // Subtitle
-  doc.font('Helvetica')
-    .fontSize(16)
-    .fillColor('#4b5563')
-    .text('CERTIFICATE OF COMPLETION', 0, 135, { align: 'center', characterSpacing: 2 });
-
-  // Presentation text
-  doc.font('Helvetica-Oblique')
-    .fontSize(14)
-    .fillColor('#6b7280')
-    .text('This is proudly presented to', 0, 190, { align: 'center' });
-
-  // Student Name
-  doc.font('Helvetica-Bold')
-    .fontSize(32)
-    .fillColor('#111827')
-    .text(studentName, 0, 215, { align: 'center' });
-
-  // Internship detail text
-  doc.font('Helvetica')
-    .fontSize(14)
-    .fillColor('#4b5563')
-    .text('for successfully completing the internship program in', 0, 260, { align: 'center' });
-
-  // Course Title
-  doc.font('Helvetica-Bold')
-    .fontSize(22)
-    .fillColor('#3b82f6')
-    .text(courseTitle, 0, 285, { align: 'center' });
-
-  // Duration
-  doc.font('Helvetica')
-    .fontSize(14)
-    .fillColor('#4b5563')
-    .text(`with a duration of ${duration}.`, 0, 315, { align: 'center' });
-
-  // Embed the verification QR code
-  doc.image(qrDataUrl, doc.page.width - 170, doc.page.height - 165, { width: 100, height: 100 });
-  
-  doc.font('Helvetica')
-    .fontSize(8)
-    .fillColor('#9ca3af')
-    .text('Scan to Verify Authentic Certificate', doc.page.width - 180, doc.page.height - 55, { width: 120, align: 'center' });
-
-  // Left Signatures section
-  doc.moveTo(80, doc.page.height - 85)
-    .lineTo(240, doc.page.height - 85)
+  // Inner thin slate gray border
+  doc.rect(30, 30, pageWidth - 60, pageHeight - 60)
     .lineWidth(1)
-    .stroke('#d1d5db');
+    .stroke('#778899');
 
+  // 2. Logo (Top Left)
+  const logoPath = path.join(__dirname, '../../../frontend/public/darshi-logo.png');
+  try {
+    doc.image(logoPath, 50, 45, { width: 95 });
+  } catch (err) {
+    console.error("Error loading logo image, using vector fallback:", err);
+    // Draw a fallback vector logo
+    doc.circle(95, 80, 25).lineWidth(2).stroke('#b8975a');
+    doc.font('Helvetica-Bold').fontSize(12).fillColor('#0c3c60').text('DARSHI', 70, 74, { width: 50, align: 'center' });
+    doc.font('Helvetica').fontSize(5).text('SOFTWARE SOLUTIONS', 60, 88, { width: 70, align: 'center' });
+  }
+
+  // 3. Top Header Title Box
+  const headerBoxWidth = 480;
+  const headerBoxX = (pageWidth - headerBoxWidth) / 2;
+  doc.roundedRect(headerBoxX, 42, headerBoxWidth, 32, 6).fill('#0c3c60');
+
+  // Text inside Header Box
   doc.font('Helvetica-Bold')
-    .fontSize(11)
-    .fillColor('#111827')
-    .text('Authorized Signatory', 80, doc.page.height - 75, { width: 160, align: 'center' });
+    .fontSize(16)
+    .fillColor('#ffffff')
+    .text('DARSHI SOFTWARE SOLUTIONS PRIVATE LIMITED', headerBoxX, 51, { width: headerBoxWidth, align: 'center' });
 
-  doc.font('Helvetica')
-    .fontSize(9)
-    .fillColor('#6b7280')
-    .text('Darshi Tech Admin Panel', 80, doc.page.height - 60, { width: 160, align: 'center' });
+  // Address details under Header Box
+  doc.font('Helvetica-Bold').fontSize(9).fillColor('#1a1a1a').text('CIN : U62099AP2026PTC126197   |   Estb: 2026', headerBoxX, 80, { width: headerBoxWidth, align: 'center' });
+  doc.font('Helvetica').fontSize(8).fillColor('#4a4a4a').text('# 87/1368-HIG-II-40, Road No 1, AP Housing Board Colony, Joharapuram, Kurnool, Andhra Pradesh, India, Pin 518002', 150, 93, { width: pageWidth - 300, align: 'center' });
+  doc.font('Helvetica-Bold').fontSize(8.5).fillColor('#1a1a1a').text('Tel: 9121237729  |  8179075149', headerBoxX, 106, { width: headerBoxWidth, align: 'center' });
 
-  // Certificate Unique Identifier
-  doc.font('Helvetica')
-    .fontSize(9)
-    .fillColor('#9ca3af')
-    .text(`Certificate ID: ${certificateId}`, 40, doc.page.height - 40, { width: 400, align: 'left' });
+  // 4. Metadata (Top Right)
+  doc.font('Helvetica-Bold').fontSize(9.5).fillColor('#1a1a1a')
+    .text(`Cert. No. : ${certNo}`, pageWidth - 240, 80, { width: 190, align: 'right' });
+  doc.text(`Date : ${issueDate}`, pageWidth - 240, 98, { width: 190, align: 'right' });
+
+  // 5. Main Title: "Certificate of Completion"
+  doc.font('Times-Bold')
+    .fontSize(34)
+    .fillColor('#0c3c60')
+    .text('Certificate of Completion', 0, 132, { align: 'center' });
+
+  // Diamond ornament separator
+  const centerY = 175;
+  doc.moveTo(280, centerY).lineTo(395, centerY).lineWidth(1).stroke('#0c3c60');
+  doc.moveTo(446.89, centerY).lineTo(561.89, centerY).lineWidth(1).stroke('#0c3c60');
+  doc.moveTo(420.94, centerY - 4).lineTo(426.94, centerY).lineTo(420.94, centerY + 4).lineTo(414.94, centerY).closePath().fill('#0c3c60');
+  doc.moveTo(410.94, centerY - 2).lineTo(413.94, centerY).lineTo(410.94, centerY + 2).lineTo(407.94, centerY).closePath().fill('#0c3c60');
+  doc.moveTo(430.94, centerY - 2).lineTo(433.94, centerY).lineTo(430.94, centerY + 2).lineTo(427.94, centerY).closePath().fill('#0c3c60');
+
+  // 6. Certificate Body (precise alignments on drawn line underscores)
+  const line1Y = 210;
+  const line2Y = 245;
+  const line3Y = 280;
+  const line4Y = 315;
+
+  // Line 1: studentName
+  doc.font('Times-Italic').fontSize(14).fillColor('#222222').text('This is to certify that Mr./Mrs.', 60, line1Y);
+  doc.moveTo(240, line1Y + 13).lineTo(pageWidth - 60, line1Y + 13).lineWidth(0.75).stroke('#4a4a4a');
+  doc.font('Times-Bold').fontSize(16).fillColor('#000000').text(studentName, 240, line1Y - 1, { width: pageWidth - 300, align: 'center' });
+
+  // Line 2: courseTitle
+  doc.font('Times-Italic').fontSize(14).fillColor('#222222').text('has successfully completed the', 60, line2Y);
+  doc.moveTo(250, line2Y + 13).lineTo(pageWidth - 60, line2Y + 13).lineWidth(0.75).stroke('#4a4a4a');
+  doc.font('Times-Bold').fontSize(15).fillColor('#000000').text(courseTitle, 250, line2Y - 1, { width: pageWidth - 310, align: 'center' });
+
+  // Line 3: domainName
+  doc.font('Times-Italic').fontSize(14).fillColor('#222222').text('in the domain of', 60, line3Y);
+  doc.moveTo(170, line3Y + 13).lineTo(pageWidth - 60, line3Y + 13).lineWidth(0.75).stroke('#4a4a4a');
+  doc.font('Times-Bold').fontSize(14).fillColor('#000000').text(domainName, 170, line3Y - 1, { width: pageWidth - 230, align: 'center' });
+
+  // Line 4: dates and company
+  doc.font('Times-Italic').fontSize(14).fillColor('#222222').text('from', 60, line4Y);
+  doc.moveTo(95, line4Y + 13).lineTo(195, line4Y + 13).lineWidth(0.75).stroke('#4a4a4a');
+  doc.font('Times-Bold').fontSize(13).fillColor('#000000').text(startDate, 95, line4Y - 1, { width: 100, align: 'center' });
+
+  doc.font('Times-Italic').fontSize(14).fillColor('#222222').text('to', 202, line4Y);
+  doc.moveTo(222, line4Y + 13).lineTo(322, line4Y + 13).lineWidth(0.75).stroke('#4a4a4a');
+  doc.font('Times-Bold').fontSize(13).fillColor('#000000').text(endDate, 222, line4Y - 1, { width: 100, align: 'center' });
+
+  doc.font('Times-Italic').fontSize(14).fillColor('#222222').text('at', 328, line4Y);
+  doc.moveTo(345, line4Y + 13).lineTo(pageWidth - 60, line4Y + 13).lineWidth(0.75).stroke('#4a4a4a');
+  doc.font('Times-Bold').fontSize(14).fillColor('#000000').text('Darshi Software Solutions Private Limited.', 345, line4Y - 1, { width: pageWidth - 405, align: 'center' });
+
+  // 7. Dedication & success paragraphs
+  const paraY = 352;
+  doc.font('Times-Italic').fontSize(13).fillColor('#333333')
+    .text('During the internship, the candidate has demonstrated dedication, sincerity,', 60, paraY)
+    .text('and a strong commitment to learning.', 60, paraY + 18)
+    .text('We wish the candidate success in all future endeavors.', 60, paraY + 36);
+
+  // 8. Footer section
+  const footerY = pageHeight - 95;
+
+  // Checked By (Left)
+  doc.font('Helvetica-Bold').fontSize(10.5).fillColor('#1a1a1a').text('Checked By', 60, footerY);
+  doc.font('Helvetica').fontSize(9.5).fillColor('#4a4a4a').text(`Date : ${issueDate}`, 60, footerY + 16);
+
+  // Verification QR Code (Next to Checked By)
+  doc.image(qrDataUrl, 170, footerY - 15, { width: 50, height: 50 });
+  doc.font('Helvetica').fontSize(6.5).fillColor('#9ca3af').text('Scan to Verify', 170, footerY + 38, { width: 50, align: 'center' });
+
+  // Seal / Stamp (Center)
+  const sealX = pageWidth / 2;
+  const sealY = pageHeight - 75;
+  doc.circle(sealX, sealY, 36).lineWidth(1.5).stroke('#0c3c60');
+  doc.circle(sealX, sealY, 30).lineWidth(0.75).stroke('#0c3c60');
+  doc.font('Helvetica-Bold').fontSize(7.5).fillColor('#0c3c60')
+    .text('DARSHI SOFTWARE', sealX - 40, sealY - 14, { width: 80, align: 'center' })
+    .text('SOLUTIONS', sealX - 40, sealY - 5, { width: 80, align: 'center' })
+    .fontSize(7)
+    .text('KURNOOL', sealX - 40, sealY + 6, { width: 80, align: 'center' });
+
+  // Authorized Signatory (Right)
+  const sigX = pageWidth - 260;
+  doc.moveTo(sigX, footerY - 5).lineTo(pageWidth - 60, footerY - 5).lineWidth(1).stroke('#4a4a4a');
+  doc.font('Helvetica-Bold').fontSize(10.5).fillColor('#1a1a1a').text('Authorized Signatory', sigX, footerY, { width: 200, align: 'center' });
+  doc.font('Helvetica').fontSize(9.5).fillColor('#4a4a4a').text('Darshi Software Solutions Pvt. Ltd.', sigX, footerY + 16, { width: 200, align: 'center' });
+
+  // Document unique id indicator (bottom thin metadata)
+  doc.font('Helvetica').fontSize(7.5).fillColor('#9ca3af').text(`Verification ID: ${certificateId}`, 60, pageHeight - 20);
 
   doc.end();
 };

@@ -98,6 +98,29 @@ export default function StudentDashboard({ user }) {
     }
   };
 
+  const handleDownloadReceipt = async (enrollmentId) => {
+    try {
+      const token = localStorage.getItem('darshi_token');
+      const res = await fetch(`/api/enrollments/receipt/${enrollmentId}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.message || 'Receipt file generation failed.');
+      }
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Receipt_DarshiTech_${enrollmentId.substring(0, 8)}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      alert(err.message || 'Failed to download receipt.');
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
@@ -213,24 +236,35 @@ export default function StudentDashboard({ user }) {
                       <p>Enrolled: {new Date(enr.enrolledAt).toLocaleDateString()}</p>
                     </div>
 
-                    {enr.status === 'COMPLETED' ? (
+                    <div className="flex items-center gap-2.5">
                       <button
-                        onClick={() => handleDownloadCertificate(enr.id)}
-                        className="btn-gold px-3.5 py-2 text-base flex items-center gap-1.5"
+                        onClick={() => handleDownloadReceipt(enr.id)}
+                        className="btn-outline-gold px-3.5 py-1.5 text-base flex items-center gap-1.5"
+                        title="Download Transaction Payment Receipt"
                       >
                         <FileDown className="h-4 w-4" />
-                        Download Certificate
+                        Receipt
                       </button>
-                    ) : (
-                      <button
-                        disabled
-                        className="bg-transparent text-theme-muted font-bold border border-theme-border text-base px-3.5 py-2 rounded-full flex items-center gap-1.5 cursor-not-allowed"
-                        title="Certificate will become available when the admin marks completion"
-                      >
-                        <Clock className="h-4 w-4 text-theme-muted" />
-                        Awaiting Finish
-                      </button>
-                    )}
+
+                      {enr.status === 'COMPLETED' ? (
+                        <button
+                          onClick={() => handleDownloadCertificate(enr.id)}
+                          className="btn-gold px-3.5 py-2 text-base flex items-center gap-1.5"
+                        >
+                          <FileDown className="h-4 w-4" />
+                          Certificate
+                        </button>
+                      ) : (
+                        <button
+                          disabled
+                          className="bg-transparent text-theme-muted font-bold border border-theme-border text-base px-3.5 py-2 rounded-full flex items-center gap-1.5 cursor-not-allowed"
+                          title="Certificate will become available when the admin marks completion"
+                        >
+                          <Clock className="h-4 w-4 text-theme-muted" />
+                          Awaiting Finish
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

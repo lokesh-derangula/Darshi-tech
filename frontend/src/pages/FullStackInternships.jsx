@@ -164,7 +164,7 @@ export default function FullStackInternships() {
                 }`}
               >
                 <Icon className={`h-5 w-5 transition-transform duration-300 ${isActive ? 'scale-110 text-[var(--btn-text)]' : 'text-theme-muted group-hover:text-theme-title'}`} />
-                <span className="font-serif text-md font-bold uppercase tracking-wider">{tier.title}</span>
+                <span className="font-serif text-md font-bold uppercase tracking-wider" style={{ color: isActive ? 'var(--btn-text)' : 'inherit' }}>{tier.title}</span>
               </button>
             );
           })}

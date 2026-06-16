@@ -71,17 +71,51 @@ router.get('/download/:enrollmentId', verifyToken, async (req, res) => {
       return res.status(400).json({ message: 'Certificate has not been issued yet. Please contact your administrator.' });
     }
 
+    // Helpers for domain name mapping and date formatting
+    const getDomainForCategory = (category) => {
+      switch (category) {
+        case 'Research': return 'Research & Development';
+        case 'Full Stack': return 'Full Stack Development';
+        case 'Product Development': return 'Product Development';
+        case 'Web Development': return 'Web Development';
+        case 'Workshops': return 'Technical Workshops';
+        case 'Training': return 'Skill Development & Training';
+        default: return `${category} Development`;
+      }
+    };
+
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+
+    // Calculate sequential certificate serial number based on completion date order
+    const completedCount = await prisma.enrollment.count({
+      where: {
+        status: 'COMPLETED',
+        updatedAt: { lte: enrollment.updatedAt },
+      },
+    });
+    const serialStr = String(completedCount).padStart(4, '0');
+    const certNo = `DSSPL/2026/CT/${serialStr}`;
+
     // Generate PDF to stream
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=Certificate_${enrollmentId.substring(0, 8)}.pdf`);
 
-    await generateCertificatePDF(
-      res,
-      enrollment.user.name,
-      enrollment.course.title,
-      enrollment.course.duration,
-      enrollment.id
-    );
+    await generateCertificatePDF(res, {
+      studentName: enrollment.user.name,
+      courseTitle: enrollment.course.title,
+      domainName: getDomainForCategory(enrollment.course.category),
+      startDate: formatDate(enrollment.enrolledAt),
+      endDate: formatDate(enrollment.updatedAt),
+      certNo,
+      issueDate: formatDate(enrollment.updatedAt),
+      certificateId: enrollment.id,
+    });
   } catch (error) {
     console.error('Download certificate error:', error);
     if (!res.headersSent) {

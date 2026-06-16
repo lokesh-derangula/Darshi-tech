@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Award, Code, CheckCircle, Users, MapPin, ArrowRight, Quote } from 'lucide-react';
 import { Globe3D } from '../components/ui/3d-globe';
 import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
@@ -124,6 +124,8 @@ function CountUp({ value }) {
 }
 
 export default function Home() {
+  const [selectedGalleryImg, setSelectedGalleryImg] = useState(null);
+
   const stats = [
     { label: 'STUDENTS TRAINED', value: '500+', icon: Users },
     { label: 'PROJECTS DELIVERED', value: '50+', icon: Code },
@@ -353,6 +355,56 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Workspace Gallery */}
+      <section className="space-y-6 pt-6 relative z-10">
+        <div className="text-center md:text-left space-y-2">
+          <h2 className="font-serif text-3xl font-light text-theme-title">Workspace Gallery</h2>
+          <p className="text-theme-muted text-base uppercase tracking-wider">A glimpse inside our corporate training labs and innovation environment</p>
+        </div>
+
+        <div className="grid sm:grid-cols-3 gap-6">
+          {[
+            { src: '/images/entrance.png', title: 'Corporate Entrance', desc: 'Secure institutional access and corporate branding' },
+            { src: '/images/office_training.png', title: 'High-Tech Classroom', desc: 'Structured systems for live classes and training' },
+            { src: '/images/office_desks.png', title: 'Developer Laboratories', desc: 'Collaborative development desks and sandbox networks' }
+          ].map((item, idx) => (
+            <motion.div
+              key={idx}
+              whileHover={{ y: -6, scale: 1.02 }}
+              onClick={() => setSelectedGalleryImg(item)}
+              className="glass-panel p-3 cursor-pointer group flex flex-col justify-between"
+            >
+              <div className="relative overflow-hidden rounded-xl aspect-[3/2] border border-theme-border">
+                <img src={item.src} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="badge-theme border px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-theme-title">View Photo</span>
+                </div>
+              </div>
+              <div className="mt-4 space-y-1">
+                <h3 className="font-serif text-md font-semibold text-theme-card-title">{item.title}</h3>
+                <p className="text-theme-desc text-base leading-relaxed">{item.desc}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Lightbox Modal */}
+        {selectedGalleryImg && (
+          <div
+            onClick={() => setSelectedGalleryImg(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4 cursor-zoom-out"
+          >
+            <div className="relative max-w-4xl max-h-[85vh] overflow-hidden rounded-2xl border border-theme-border bg-theme-card p-2 shadow-2xl">
+              <img src={selectedGalleryImg.src} alt={selectedGalleryImg.title} className="max-w-full max-h-[75vh] object-contain rounded-xl" />
+              <div className="p-4 text-center space-y-1 bg-theme-card">
+                <h3 className="font-serif text-lg font-bold text-theme-title">{selectedGalleryImg.title}</h3>
+                <p className="text-theme-desc text-base">{selectedGalleryImg.desc}</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
       {/* Contact & Map */}
       <section className="grid md:grid-cols-2 gap-8 items-center relative z-10">
         <motion.div
@@ -385,27 +437,21 @@ export default function Home() {
           </Link>
         </motion.div>
 
-        {/* Mock Map View */}
+        {/* Highlighted Director Panel */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="glass-panel p-3 h-[280px] relative overflow-hidden group"
+          className="glass-panel p-3 h-[320px] relative overflow-hidden group border border-theme-border"
         >
-          <div className="absolute inset-0 bg-black/45 z-10 flex items-center justify-center flex-col p-4 text-center">
-            <span className="bg-theme-card border border-[var(--text-serif)]/30 text-theme-card-title rounded-full px-4 py-2 flex items-center gap-2 text-base font-bold uppercase tracking-wider shadow-md transition-colors duration-300">
-              <MapPin className="h-4 w-4 animate-bounce text-[var(--text-serif)]" />
-              DARSHI TECH CAMPUS
-            </span>
-          </div>
-          <div className="w-full h-full rounded-xl relative border border-theme-border transition-colors duration-300" style={{ backgroundColor: 'var(--scrollbar-track)' }}>
-            <div className="absolute top-1/4 left-1/3 w-32 h-[1px] bg-theme-border transform rotate-12 transition-colors duration-300"></div>
-            <div className="absolute top-1/2 left-1/4 w-40 h-[1px] bg-theme-border transform -rotate-12 transition-colors duration-300"></div>
-            <div className="absolute top-2/3 left-1/2 w-24 h-[1px] bg-theme-border transform rotate-45 transition-colors duration-300"></div>
-            <div className="absolute top-1/3 left-2/3 w-[1px] bg-theme-border h-28 transition-colors duration-300"></div>
-            <div className="absolute w-6 h-6 rounded-full bg-[var(--text-serif)]/15 animate-ping top-1/2 left-1/2 -mt-3 -ml-3 transition-colors duration-300"></div>
-            <div className="absolute w-3 h-3 rounded-full bg-[var(--text-serif)] top-1/2 left-1/2 -mt-1.5 -ml-1.5 shadow-lg transition-colors duration-300"></div>
+          <div className="relative w-full h-full rounded-xl overflow-hidden border border-theme-border shadow-inner">
+            <img src="/images/director.jpg" alt="Director, Darshi Software Solutions" className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500" />
+            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 flex flex-col justify-end text-left z-10">
+              <span className="badge-theme border border-gold px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider text-theme-title w-fit mb-1 bg-black/30">Visionary Director</span>
+              <h3 className="font-serif text-lg font-bold text-white tracking-wide">Visionary Leadership</h3>
+              <p className="text-gray-300 text-xs mt-0.5 leading-relaxed">Driving innovation, industry competence, and excellence in training.</p>
+            </div>
           </div>
         </motion.div>
       </section>

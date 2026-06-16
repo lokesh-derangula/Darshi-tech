@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import prisma from '../utils/prisma.js';
 import { verifyToken } from '../middleware/auth.js';
+import { generateReceiptPDF } from '../utils/receiptGenerator.js';
 
 const router = Router();
 
@@ -112,6 +113,42 @@ router.post('/verify-payment', verifyToken, async (req, res) => {
   } catch (error) {
     console.error('Verify payment error:', error);
     res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
+// STUDENT/ADMIN: DOWNLOAD RECEIPT PDF
+router.get('/receipt/:enrollmentId', verifyToken, async (req, res) => {
+  const { enrollmentId } = req.params;
+
+  try {
+    const enrollment = await prisma.enrollment.findUnique({
+      where: { id: enrollmentId },
+      include: {
+        user: true,
+        course: true,
+      },
+    });
+
+    if (!enrollment) {
+      return res.status(404).json({ message: 'Enrollment not found.' });
+    }
+
+    // Authorization check: User must own the enrollment OR be an admin
+    if (enrollment.userId !== req.user.id && req.user.role !== 'ADMIN') {
+      return res.status(403).json({ message: 'Unauthorized access.' });
+    }
+
+    // Set PDF download headers
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=Receipt_${enrollmentId.substring(0, 8)}.pdf`);
+
+    // Generate dynamic receipt PDF
+    generateReceiptPDF(res, enrollment);
+  } catch (error) {
+    console.error('Download receipt error:', error);
+    if (!res.headersSent) {
+      res.status(500).json({ message: 'Failed to generate receipt PDF.' });
+    }
   }
 });
 
