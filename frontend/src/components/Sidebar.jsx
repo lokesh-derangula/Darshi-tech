@@ -45,12 +45,13 @@ export default function Sidebar({ isOpen, toggleSidebar, user, onLogout, bannerH
         color: 'var(--sidebar-text)'
       }}
     >
-      <div>
+      {/* Top Section (Header + Scrollable Nav) */}
+      <div className="flex flex-col flex-grow min-h-0">
         {/* Sidebar Header */}
-        <div className="flex h-16 items-center justify-between px-4 border-b" style={{ borderBottomColor: 'var(--sidebar-border)' }}>
+        <div className="flex h-16 shrink-0 items-center justify-between px-4 border-b" style={{ borderBottomColor: 'var(--sidebar-border)' }}>
           <div className={`flex items-center gap-3 overflow-hidden transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 w-0'}`}>
             <span className="font-serif text-lg font-bold tracking-widest text-theme-title whitespace-nowrap">
-              DARSHI TECH
+              DARSHI SOLUTIONS
             </span>
           </div>
           <button
@@ -62,8 +63,8 @@ export default function Sidebar({ isOpen, toggleSidebar, user, onLogout, bannerH
           </button>
         </div>
 
-        {/* Navigation Items */}
-        <nav className="mt-6 space-y-1 px-3">
+        {/* Scrollable Navigation Items */}
+        <nav className="mt-6 flex-grow overflow-y-auto space-y-1 px-3 scrollbar-thin">
           {menuItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -97,7 +98,7 @@ export default function Sidebar({ isOpen, toggleSidebar, user, onLogout, bannerH
       </div>
 
       {/* Sidebar Footer */}
-      <div className="p-3 border-t transition-colors duration-300" style={{ borderTopColor: 'var(--sidebar-border)', backgroundColor: theme === 'bright' ? 'rgba(0,0,0,0.02)' : 'rgba(8,9,13,0.4)' }}>
+      <div className="p-3 border-t shrink-0 transition-colors duration-300" style={{ borderTopColor: 'var(--sidebar-border)', backgroundColor: theme === 'bright' ? 'rgba(0,0,0,0.02)' : 'rgba(8,9,13,0.4)' }}>
         {user ? (
           <div className="flex flex-col gap-2">
             {/* Dashboard Links */}
