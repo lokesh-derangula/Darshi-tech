@@ -78,7 +78,8 @@ export default function StudentDashboard({ user }) {
   const handleDownloadCertificate = async (enrollmentId) => {
     try {
       const token = localStorage.getItem('darshi_token');
-      const res = await fetch(`/api/certificates/download/${enrollmentId}`, {
+      const baseUrl = import.meta.env.VITE_API_URL || '';
+      const res = await fetch(`${baseUrl}/api/certificates/download/${enrollmentId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!res.ok) {
@@ -101,7 +102,8 @@ export default function StudentDashboard({ user }) {
   const handleDownloadReceipt = async (enrollmentId) => {
     try {
       const token = localStorage.getItem('darshi_token');
-      const res = await fetch(`/api/enrollments/receipt/${enrollmentId}`, {
+      const baseUrl = import.meta.env.VITE_API_URL || '';
+      const res = await fetch(`${baseUrl}/api/enrollments/receipt/${enrollmentId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!res.ok) {
