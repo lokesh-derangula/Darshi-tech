@@ -53,7 +53,7 @@ export default function TopBanner({ theme, setTheme }) {
         {/* ─── LEFT: Logo ─── */}
         <div className="flex items-center shrink-0" style={{ width: '80px' }}>
           <img
-            src="/darshi-logo.png"
+            src="/darshi-logo.jpg"
             alt="Darshi Logo"
             className="h-[68px] w-[68px] object-contain drop-shadow-md"
           />

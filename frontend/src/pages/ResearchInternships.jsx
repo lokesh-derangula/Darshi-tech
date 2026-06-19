@@ -13,16 +13,16 @@ export default function ResearchInternships() {
   const navigate = useNavigate();
 
   const categories = [
-    { title: 'NLP', duration: '8 Weeks', prerequisites: 'Python, Basic Machine Learning', fee: 8500, dbMatchTitle: 'NLP & Transformer Architectures' },
-    { title: 'LLM', duration: '10 Weeks', prerequisites: 'Python, NLP Basics, PyTorch', fee: 9500, dbMatchTitle: 'LLM Fine-Tuning & AI Applications' },
-    { title: 'AI Applications', duration: '10 Weeks', prerequisites: 'Python, REST APIs, LangChain', fee: 9000 },
-    { title: 'Quantum Technology', duration: '8 Weeks', prerequisites: 'Linear Algebra, Python, Qiskit', fee: 10000, dbMatchTitle: 'Quantum Technology & Computing' },
-    { title: 'Image Processing', duration: '8 Weeks', prerequisites: 'Python, OpenCV, NumPy', fee: 7000 },
-    { title: 'ML/DL', duration: '12 Weeks', prerequisites: 'Python, Linear Algebra, Statistics', fee: 8000 },
-    { title: 'Transformers', duration: '6 Weeks', prerequisites: 'Deep Learning Basics, PyTorch', fee: 7500 },
-    { title: 'Cyber Security', duration: '8 Weeks', prerequisites: 'Linux Basics, Networking Fundamentals', fee: 8500 },
-    { title: 'Data Management', duration: '6 Weeks', prerequisites: 'SQL, Relational Databases, Python', fee: 6000 },
-    { title: 'Robotics', duration: '10 Weeks', prerequisites: 'C++, Python, Basic Microcontrollers', fee: 11000 },
+    { title: 'NLP', duration: '8 Weeks', prerequisites: 'Python, Basic Machine Learning', fee: 2500, dbMatchTitle: 'NLP & Transformer Architectures' },
+    { title: 'LLM', duration: '10 Weeks', prerequisites: 'Python, NLP Basics, PyTorch', fee: 2500, dbMatchTitle: 'LLM Fine-Tuning & AI Applications' },
+    { title: 'AI Applications', duration: '10 Weeks', prerequisites: 'Python, REST APIs, LangChain', fee: 2500 },
+    { title: 'Quantum Technology', duration: '8 Weeks', prerequisites: 'Linear Algebra, Python, Qiskit', fee: 2500, dbMatchTitle: 'Quantum Technology & Computing' },
+    { title: 'Image Processing', duration: '8 Weeks', prerequisites: 'Python, OpenCV, NumPy', fee: 2500 },
+    { title: 'ML/DL', duration: '12 Weeks', prerequisites: 'Python, Linear Algebra, Statistics', fee: 2500 },
+    { title: 'Transformers', duration: '6 Weeks', prerequisites: 'Deep Learning Basics, PyTorch', fee: 2500 },
+    { title: 'Cyber Security', duration: '8 Weeks', prerequisites: 'Linux Basics, Networking Fundamentals', fee: 2500 },
+    { title: 'Data Management', duration: '6 Weeks', prerequisites: 'SQL, Relational Databases, Python', fee: 2500 },
+    { title: 'Robotics', duration: '10 Weeks', prerequisites: 'C++, Python, Basic Microcontrollers', fee: 2500 },
   ];
 
   useEffect(() => {

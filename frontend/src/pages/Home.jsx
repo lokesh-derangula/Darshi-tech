@@ -154,9 +154,9 @@ export default function Home() {
   ];
 
   const showcaseCategories = [
-    { title: 'Research Internships', path: '/research-projects', desc: 'NLP, Large Language Models, AI, and Quantum Computing.', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
-    { title: 'Full Stack Projects', path: '/full-stack-projects', desc: 'React, Node.js, Django, databases, and enterprise structures.', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
-    { title: 'Product Development', path: '/product-development', desc: 'Custom enterprise software, ERP applications, and AI products.', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
+    { title: 'Research Projects and Internships', path: '/research-projects', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
+    { title: 'Full Stack Projects and Internships', path: '/full-stack-projects', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
+    { title: 'Product Development', path: '/product-development', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
   ];
 
   // Framer Motion Animation Variants
@@ -310,7 +310,6 @@ export default function Home() {
                   {cat.title}
                   <ArrowRight className="h-3.5 w-3.5 text-[var(--text-serif)]/60" />
                 </h3>
-                <p className="text-theme-muted text-base mt-1">{cat.desc}</p>
               </Link>
             ))}
           </div>
@@ -362,11 +361,13 @@ export default function Home() {
           <p className="text-theme-muted text-base uppercase tracking-wider">A glimpse inside our corporate training labs and innovation environment</p>
         </div>
 
-        <div className="grid sm:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {[
             { src: '/images/entrance.png', title: 'Corporate Entrance', desc: 'Secure institutional access and corporate branding' },
             { src: '/images/office_training.png', title: 'High-Tech Classroom', desc: 'Structured systems for live classes and training' },
-            { src: '/images/office_desks.png', title: 'Developer Laboratories', desc: 'Collaborative development desks and sandbox networks' }
+            { src: '/images/office_desks.png', title: 'Developer Laboratories', desc: 'Collaborative development desks and sandbox networks' },
+            { src: '/images/students_group_1.png', title: 'Interactive Development Cohort', desc: 'Students collaborating on milestone projects inside our training labs' },
+            { src: '/images/students_group_2.png', title: 'Developer Milestone Celebrations', desc: 'Interns celebrating successful production releases and program completions' }
           ].map((item, idx) => (
             <motion.div
               key={idx}

@@ -98,23 +98,8 @@ export default function WorkshopsConferences() {
                       <Calendar className="h-4 w-4 text-theme-title" />
                       {event.date}
                     </span>
-                    <span className="badge-theme border px-2.5 py-0.5 rounded-full">
-                      Fee: {event.fee}
-                    </span>
                   </div>
                   <h3 className="font-serif text-xl font-bold text-theme-card-title">{event.title}</h3>
-                </div>
-
-                <div className="space-y-2 pt-2 border-t border-theme-border">
-                  <span className="text-base text-theme-muted font-bold uppercase tracking-wider block">Featured Speakers</span>
-                  <ul className="space-y-1">
-                    {event.speakers.map((s, idx) => (
-                      <li key={idx} className="text-base text-theme-desc flex items-center gap-1.5">
-                        <User className="h-3.5 w-3.5 text-theme-title" />
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
 
                 <div className="space-y-1 pt-2 border-t border-theme-border text-base text-theme-desc flex items-start gap-1.5">
@@ -152,7 +137,6 @@ export default function WorkshopsConferences() {
                 <div className="mt-6 flex items-center justify-between border-t border-theme-border pt-4">
                   <div>
                     <p className="text-theme-muted text-base font-bold uppercase tracking-wider">Duration: {course.duration}</p>
-                    <p className="text-theme-title font-serif text-xl font-light mt-1">₹{course.price.toLocaleString('en-IN')}</p>
                   </div>
                   <button onClick={() => handleEnrollClick(course)} className="btn-gold px-4 py-2">
                     Enroll Now
