@@ -204,11 +204,11 @@ export default function FullStackInternships() {
                   {/* Vertical Connector Line from Parent */}
                   <motion.div 
                     variants={childVariants}
-                    className="w-0.5 h-6 bg-[var(--tree-line)] ml-10" 
+                    className="hidden md:block w-0.5 h-6 bg-[var(--tree-line)] ml-10" 
                   />
                   
                   {/* Children Container */}
-                  <div className="relative ml-10 pl-8 border-l-2 border-[var(--tree-line)] space-y-5 pb-4">
+                  <div className="relative ml-0 md:ml-10 pl-0 md:pl-8 border-l-0 md:border-l-2 border-[var(--tree-line)] space-y-5 pb-4">
                     {tier.technologies.map((tech, idx) => {
                       const TechIcon = tech.icon;
                       return (
@@ -218,10 +218,10 @@ export default function FullStackInternships() {
                           className="relative group"
                         >
                           {/* Horizontal connecting line */}
-                          <div className="absolute top-1/2 -left-8 w-8 h-[2px] bg-[var(--tree-line)] group-hover:bg-[var(--tree-accent)] transition-colors duration-300" />
+                          <div className="hidden md:block absolute top-1/2 -left-8 w-8 h-[2px] bg-[var(--tree-line)] group-hover:bg-[var(--tree-accent)] transition-colors duration-300" />
                           
                           {/* Tech Node Card */}
-                          <div className="glass-panel ml-4 p-4 flex items-center justify-between hover:border-[var(--tree-accent)] hover:shadow-[0_0_15px_var(--glow-color)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+                          <div className="glass-panel ml-0 md:ml-4 p-4 flex items-center justify-between hover:border-[var(--tree-accent)] hover:shadow-[0_0_15px_var(--glow-color)] hover:-translate-y-1 transition-all duration-300 cursor-pointer">
                             <div className="flex items-center gap-4">
                               <div className="p-2 bg-[var(--tree-accent)]/10 text-[var(--tree-accent)] rounded-lg border border-[var(--tree-accent)]/25 group-hover:bg-[var(--tree-accent)]/20 group-hover:text-[var(--tree-accent)] transition-colors duration-300">
                                 <TechIcon className="h-5 w-5" />

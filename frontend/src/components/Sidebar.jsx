@@ -34,8 +34,8 @@ export default function Sidebar({ isOpen, toggleSidebar, user, onLogout, bannerH
 
   return (
     <aside
-      className={`fixed left-0 z-40 border-r transition-all duration-300 ease-in-out flex flex-col justify-between ${
-        isOpen ? 'w-72' : 'w-20'
+      className={`fixed left-0 z-40 border-r transition-all duration-300 ease-in-out flex flex-col justify-between shadow-2xl md:shadow-none ${
+        isOpen ? 'w-72 translate-x-0' : 'w-72 md:w-20 -translate-x-full md:translate-x-0'
       }`}
       style={{
         top: bannerHeight,

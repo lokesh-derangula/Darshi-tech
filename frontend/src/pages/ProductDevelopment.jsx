@@ -166,7 +166,7 @@ export default function ProductDevelopment() {
       {/* Portfolio Gallery */}
       <section className="space-y-6">
         <h2 className="font-serif text-2xl font-light text-theme-title">Project Portfolio Gallery</h2>
-        <div className="grid sm:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {gallery.map((g, i) => (
             <motion.div
               key={i}

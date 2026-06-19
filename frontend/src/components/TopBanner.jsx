@@ -1,6 +1,7 @@
 import React from 'react';
+import { Menu } from 'lucide-react';
 
-export default function TopBanner({ theme, setTheme }) {
+export default function TopBanner({ theme, setTheme, toggleSidebar, isSidebarOpen }) {
   return (
     <div
       className="fixed top-0 left-0 right-0 z-50 w-full shadow-2xl transition-all duration-300"
@@ -48,24 +49,35 @@ export default function TopBanner({ theme, setTheme }) {
         }}
       />
 
-      <div className="relative z-10 flex items-center h-full px-4">
+      <div className="relative z-10 flex items-center h-full px-4 justify-between md:justify-start w-full">
 
-        {/* ─── LEFT: Logo ─── */}
-        <div className="flex items-center shrink-0" style={{ width: '80px' }}>
-          <img
-            src="/darshi-logo.jpg"
-            alt="Darshi Logo"
-            className="h-[68px] w-[68px] object-contain drop-shadow-md"
-          />
+        <div className="flex items-center shrink-0">
+          {/* Hamburger menu button */}
+          <button
+            onClick={toggleSidebar}
+            className="md:hidden mr-2.5 rounded-full p-2 text-[#c5a880] hover:bg-[#c5a880]/10 transition-colors"
+            title="Toggle Navigation Menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+
+          {/* ─── LEFT: Logo ─── */}
+          <div className="flex items-center">
+            <img
+              src="/darshi-logo.jpg"
+              alt="Darshi Logo"
+              className="h-[52px] w-[52px] sm:h-[68px] sm:w-[68px] object-contain drop-shadow-md"
+            />
+          </div>
         </div>
 
         {/* ─── DIVIDER ─── */}
-        <div className="mx-3 h-12 w-px bg-gradient-to-b from-transparent via-[#c5a880]/50 to-transparent shrink-0" />
+        <div className="mx-2 sm:mx-3 h-12 w-px bg-gradient-to-b from-transparent via-[#c5a880]/50 to-transparent shrink-0 hidden xs:block" />
 
         {/* ─── CENTER: CIN + Company Name ─── */}
-        <div className="flex-1 flex flex-col justify-center min-w-0">
+        <div className="flex-1 flex flex-col justify-center min-w-0 ml-1.5 sm:ml-3">
           {/* Top row: CIN and Estb */}
-          <div className="flex items-center gap-5 mb-0.5">
+          <div className="hidden md:flex items-center gap-5 mb-0.5">
             <div className="flex items-center gap-1.5">
               {/* Shield icon */}
               <svg className="h-3.5 w-3.5 text-[#c5a880] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -92,24 +104,18 @@ export default function TopBanner({ theme, setTheme }) {
 
           {/* Company Name */}
           <div
+            className="font-sans font-extrabold text-[10px] sm:text-sm md:text-md lg:text-lg tracking-wider text-white uppercase truncate max-w-[130px] sm:max-w-[380px] md:max-w-none"
             style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: '800',
-              fontSize: '18px',
-              color: '#ffffff',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              lineHeight: '1.1',
               textShadow: '0 0 30px rgba(197,168,128,0.2)',
-              whiteSpace: 'nowrap',
+              lineHeight: '1.1',
             }}
           >
             DARSHI SOFTWARE SOLUTIONS{' '}
-            <span style={{ color: '#ffffff' }}>PRIVATE LIMITED</span>
+            <span className="hidden sm:inline" style={{ color: '#ffffff' }}>PRIVATE LIMITED</span>
           </div>
 
           {/* Gold diamond divider */}
-          <div className="flex items-center gap-1 mt-0.5">
+          <div className="hidden md:flex items-center gap-1 mt-0.5">
             <div className="h-px w-8 bg-gradient-to-r from-transparent to-[#c5a880]/60" />
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
               <path d="M5 0 L10 5 L5 10 L0 5 Z" fill="#c5a880" opacity="0.8" />
@@ -124,7 +130,7 @@ export default function TopBanner({ theme, setTheme }) {
           </div>
 
           {/* Address */}
-          <div style={{ color: '#a8b8c8', fontSize: '9px', fontFamily: 'Inter, sans-serif', letterSpacing: '0.03em', marginTop: '1px' }}>
+          <div className="hidden lg:block" style={{ color: '#a8b8c8', fontSize: '9px', fontFamily: 'Inter, sans-serif', letterSpacing: '0.03em', marginTop: '1px' }}>
             # 87/1368-HIG-II-40, Road No 1, AP Housing Board Colony, Joharapuram, Kurnool, Andhra Pradesh, India, Pin 518002
           </div>
         </div>
@@ -164,7 +170,7 @@ export default function TopBanner({ theme, setTheme }) {
           </button>
 
           <div
-            className="flex items-center gap-3 px-4 py-2 rounded-full transition-all duration-300"
+            className="hidden md:flex items-center gap-3 px-4 py-2 rounded-full transition-all duration-300"
             style={{
               border: '1.5px solid #c5a880',
               background: 'rgba(197,168,128,0.06)',

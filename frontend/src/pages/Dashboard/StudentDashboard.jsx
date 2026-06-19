@@ -158,7 +158,7 @@ export default function StudentDashboard({ user }) {
         </div>
 
         {/* Info Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8 pt-6 border-t border-theme-border text-base">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mt-8 pt-6 border-t border-theme-border text-base">
           <div>
             <span className="text-theme-muted font-bold uppercase tracking-wider block mb-1">Email Identifier</span>
             <span className="text-theme-body font-medium break-all">{profile?.email}</span>
@@ -179,10 +179,10 @@ export default function StudentDashboard({ user }) {
       </section>
 
       {/* Tabs Menu */}
-      <div className="flex border-b border-theme-border gap-6">
+      <div className="flex border-b border-theme-border gap-4 sm:gap-6 overflow-x-auto whitespace-nowrap scrollbar-none pb-0.5 w-full">
         <button
           onClick={() => setActiveTab('courses')}
-          className={`pb-4 text-base font-bold uppercase tracking-wider border-b-2 transition-all ${
+          className={`pb-4 text-base font-bold uppercase tracking-wider border-b-2 transition-all shrink-0 ${
             activeTab === 'courses' ? 'border-theme-title text-theme-title' : 'border-transparent text-theme-muted hover:text-theme-title'
           }`}
         >
@@ -190,7 +190,7 @@ export default function StudentDashboard({ user }) {
         </button>
         <button
           onClick={() => setActiveTab('classes')}
-          className={`pb-4 text-base font-bold uppercase tracking-wider border-b-2 transition-all ${
+          className={`pb-4 text-base font-bold uppercase tracking-wider border-b-2 transition-all shrink-0 ${
             activeTab === 'classes' ? 'border-theme-title text-theme-title' : 'border-transparent text-theme-muted hover:text-theme-title'
           }`}
         >

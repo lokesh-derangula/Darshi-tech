@@ -196,7 +196,7 @@ export default function Home() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative overflow-hidden border border-theme-border bg-theme-card p-8 md:p-16 text-center md:text-left rounded-2xl shadow-sm z-10 transition-colors duration-300"
+        className="relative overflow-hidden border border-theme-border bg-theme-card p-5 sm:p-8 md:p-16 text-center md:text-left rounded-2xl shadow-sm z-10 transition-colors duration-300"
       >
         {/* Animated local blobs for depth */}
         <div className="absolute top-1/2 left-1/3 w-64 h-64 rounded-full bg-[var(--text-serif)]/5 blur-3xl pointer-events-none animate-float-slow -translate-y-1/2 transition-colors duration-300"></div>
@@ -213,7 +213,7 @@ export default function Home() {
 
             <motion.h1
               variants={itemVariants}
-              className="font-serif text-5xl md:text-6xl font-light tracking-tight text-theme-card-title leading-tight"
+              className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-theme-card-title leading-tight"
             >
               Invest In Your <br />
               <span className="italic font-normal text-theme-title">Technical Prowess</span>
@@ -242,7 +242,7 @@ export default function Home() {
 
           <motion.div variants={imageVariants} className="relative flex items-center justify-center">
             <div className="absolute -inset-1 bg-[var(--text-serif)]/5 blur-xl rounded-2xl transition-colors duration-300"></div>
-            <div className="relative w-full h-[380px] flex items-center justify-center overflow-hidden">
+            <div className="relative w-full h-[240px] sm:h-[300px] md:h-[380px] flex items-center justify-center overflow-hidden">
               <Globe3D
                 markers={sampleMarkers}
                 config={{
@@ -444,7 +444,7 @@ export default function Home() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="glass-panel p-3 h-[320px] relative overflow-hidden group border border-theme-border"
+          className="glass-panel p-3 h-[260px] sm:h-[320px] relative overflow-hidden group border border-theme-border"
         >
           <div className="relative w-full h-full rounded-xl overflow-hidden border border-theme-border shadow-inner">
             <img src="/images/director.jpg" alt="Director, Darshi Software Solutions" className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500" />

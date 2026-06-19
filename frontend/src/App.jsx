@@ -93,7 +93,7 @@ export default function App() {
       <div className="min-h-screen bg-mesh text-theme-body relative overflow-hidden transition-colors duration-300">
 
         {/* ── Fixed Company Banner ── */}
-        <TopBanner theme={theme} setTheme={setTheme} />
+        <TopBanner theme={theme} setTheme={setTheme} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} isSidebarOpen={isSidebarOpen} />
 
         {/* Floating background blobs — pushed down by banner, hidden in bright mode */}
         {theme === 'dark' && (
@@ -114,10 +114,20 @@ export default function App() {
           theme={theme}
         />
 
+        {/* Mobile Backdrop Overlay for Sidebar */}
+        {isSidebarOpen && (
+          <div
+            onClick={() => setIsSidebarOpen(false)}
+            className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm md:hidden"
+            style={{ top: '80px' }}
+          />
+        )}
+
         {/* Main Content Area — padded top to clear the banner */}
         <main
-          className={`transition-all duration-300 min-h-screen flex flex-col justify-between pt-[80px] ${isSidebarOpen ? 'pl-72' : 'pl-20'
-            }`}
+          className={`transition-all duration-300 min-h-screen flex flex-col justify-between pt-[80px] ${
+            isSidebarOpen ? 'pl-0 md:pl-72' : 'pl-0 md:pl-20'
+          }`}
         >
           {/* Scrollable page body */}
           <div className="flex-grow p-6 md:p-10">

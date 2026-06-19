@@ -157,9 +157,9 @@ export default function AdminDashboard() {
         </div>
       </section>
 
-      {/* KPI Stats Grid (Crisp partitioned blocks) */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 border border-theme-border bg-theme-card divide-x divide-theme-border rounded-2xl shadow-sm overflow-hidden">
-        <div className="p-5">
+      {/* KPI Stats Grid */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="glass-panel p-5">
           <div className="flex justify-between items-center text-theme-muted mb-2">
             <span className="text-base uppercase font-bold tracking-wider">Total Students</span>
             <Users className="h-4 w-4 text-theme-title" />
@@ -167,7 +167,7 @@ export default function AdminDashboard() {
           <p className="font-serif text-2xl font-light text-theme-card-title">{stats.totalStudents}</p>
         </div>
 
-        <div className="p-5">
+        <div className="glass-panel p-5">
           <div className="flex justify-between items-center text-theme-muted mb-2">
             <span className="text-base uppercase font-bold tracking-wider">Gross Revenue</span>
             <DollarSign className="h-4 w-4 text-theme-title" />
@@ -175,7 +175,7 @@ export default function AdminDashboard() {
           <p className="font-serif text-2xl font-light text-theme-card-title">₹{stats.totalRevenue.toLocaleString('en-IN')}</p>
         </div>
 
-        <div className="p-5">
+        <div className="glass-panel p-5">
           <div className="flex justify-between items-center text-theme-muted mb-2">
             <span className="text-base uppercase font-bold tracking-wider">Active Programs</span>
             <Briefcase className="h-4.5 w-4.5 text-theme-title" />
@@ -183,7 +183,7 @@ export default function AdminDashboard() {
           <p className="font-serif text-2xl font-light text-theme-card-title">{stats.activeInternships}</p>
         </div>
 
-        <div className="p-5">
+        <div className="glass-panel p-5">
           <div className="flex justify-between items-center text-theme-muted mb-2">
             <span className="text-base uppercase font-bold tracking-wider">Certificates Issued</span>
             <Award className="h-4.5 w-4.5 text-theme-title" />
@@ -193,12 +193,12 @@ export default function AdminDashboard() {
       </section>
 
       {/* Tabs */}
-      <div className="flex border-b border-theme-border gap-6">
+      <div className="flex border-b border-theme-border gap-4 sm:gap-6 overflow-x-auto whitespace-nowrap scrollbar-none pb-0.5 w-full">
         {['stats', 'courses', 'students', 'enrollments', 'classes'].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`pb-4 text-base font-bold uppercase tracking-wider border-b-2 transition-all ${
+            className={`pb-4 text-base font-bold uppercase tracking-wider border-b-2 transition-all shrink-0 ${
               activeTab === tab ? 'border-theme-title text-theme-title' : 'border-transparent text-theme-muted hover:text-theme-title'
             }`}
           >
