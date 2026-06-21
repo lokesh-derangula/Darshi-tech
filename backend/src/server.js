@@ -102,7 +102,7 @@ const seedDatabase = async () => {
           duration: '10 Weeks',
           price: 2500,
           category: 'Research',
-          thumbnail: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?w=500&q=80',
+          thumbnail: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=500&q=80',
           status: 'ACTIVE',
         },
         {
@@ -211,6 +211,13 @@ const seedDatabase = async () => {
       data: { price: 2500 }
     });
     console.log(`✔ Verified/Updated ${updateResult.count} courses to price 2500`);
+
+    // Force update the LLM course thumbnail to a working image
+    await prisma.course.updateMany({
+      where: { title: 'LLM Fine-Tuning & AI Applications' },
+      data: { thumbnail: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=500&q=80' }
+    });
+    console.log('✔ Updated LLM Fine-Tuning course thumbnail URL');
   } catch (error) {
     console.error('Error seeding database:', error);
   }
