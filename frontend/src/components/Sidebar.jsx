@@ -100,35 +100,6 @@ export default function Sidebar({ isOpen, toggleSidebar, user, onLogout, bannerH
         <div className="p-3 mt-6 border-t transition-colors duration-300" style={{ borderTopColor: 'var(--sidebar-border)', backgroundColor: theme === 'bright' ? 'rgba(0,0,0,0.02)' : 'rgba(8,9,13,0.4)' }}>
           {user ? (
             <div className="flex flex-col gap-2">
-              {/* Dashboard Links */}
-              {user.role === 'ADMIN' ? (
-                <NavLink to="/admin-dashboard">
-                  {({ isActive }) => (
-                    <div className={`flex items-center gap-4 rounded-full px-4 py-2.5 text-xs font-semibold tracking-wide uppercase border transition-colors ${
-                      isActive ? 'border-[var(--text-serif)] bg-[var(--text-serif)] text-[var(--btn-text)]' : 'border-[var(--text-serif)] text-[var(--text-serif)] bg-transparent hover:bg-[var(--sidebar-hover-bg)]'
-                    }`}>
-                      <ShieldAlert className={`h-4 w-4 shrink-0 ${isActive ? 'text-[var(--btn-text)]' : 'text-[var(--text-serif)]'}`} />
-                      <span className={`transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 w-0 pointer-events-none'}`}>
-                        Admin Panel
-                      </span>
-                    </div>
-                  )}
-                </NavLink>
-              ) : (
-                <NavLink to="/student-dashboard">
-                  {({ isActive }) => (
-                    <div className={`flex items-center gap-4 rounded-full px-4 py-2.5 text-xs font-semibold tracking-wide uppercase border transition-colors ${
-                      isActive ? 'border-[var(--text-serif)] bg-[var(--text-serif)] text-[var(--btn-text)]' : 'border-[var(--text-serif)] text-[var(--text-serif)] bg-transparent hover:bg-[var(--sidebar-hover-bg)]'
-                    }`}>
-                      <LayoutDashboard className={`h-4 w-4 shrink-0 ${isActive ? 'text-[var(--btn-text)]' : 'text-[var(--text-serif)]'}`} />
-                      <span className={`transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 w-0 pointer-events-none'}`}>
-                        Student Portal
-                      </span>
-                    </div>
-                  )}
-                </NavLink>
-              )}
-
               {/* Profile Info & Logout */}
               {isOpen ? (
                 <div className="flex items-center justify-between gap-2 px-2 py-2 border rounded-xl border-dashed border-[var(--sidebar-border)] bg-black/5 dark:bg-white/5 transition-all duration-300">

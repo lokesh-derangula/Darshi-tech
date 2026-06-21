@@ -1,7 +1,8 @@
 import React from 'react';
-import { Menu } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Menu, ShieldAlert, LayoutDashboard } from 'lucide-react';
 
-export default function TopBanner({ theme, setTheme, toggleSidebar, isSidebarOpen }) {
+export default function TopBanner({ theme, setTheme, toggleSidebar, isSidebarOpen, user }) {
   return (
     <div
       className="fixed top-0 left-0 right-0 z-50 w-full shadow-2xl transition-all duration-300"
@@ -135,7 +136,7 @@ export default function TopBanner({ theme, setTheme, toggleSidebar, isSidebarOpe
           </div>
         </div>
 
-        {/* ─── RIGHT: Theme Toggle & Phone Numbers ─── */}
+        {/* ─── RIGHT: Theme Toggle & Phone Numbers & Dashboard ─── */}
         <div className="flex items-center gap-4 shrink-0 ml-4">
           {/* Theme Toggle Button */}
           <button
@@ -196,11 +197,31 @@ export default function TopBanner({ theme, setTheme, toggleSidebar, isSidebarOpe
               <span style={{ color: '#ffffff', fontSize: '13px', fontWeight: '700', fontFamily: 'Inter, sans-serif', letterSpacing: '0.05em', lineHeight: '1.3' }}>
                 9121237729
               </span>
-              <span style={{ color: '#c5a880', fontSize: '12px', fontWeight: '600', fontFamily: 'Inter, sans-serif', letterSpacing: '0.05em', lineHeight: '1.3' }} className="transition-colors duration-300">
+              <span style={{ color: '#ffffff', fontSize: '12px', fontWeight: '600', fontFamily: 'Inter, sans-serif', letterSpacing: '0.05em', lineHeight: '1.3' }} className="transition-colors duration-300">
                 8179075149
               </span>
             </div>
           </div>
+
+          {/* Dashboard Entry Points */}
+          {user && (
+            <Link
+              to={user.role === 'ADMIN' ? '/admin-dashboard' : '/student-dashboard'}
+              className="flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide uppercase border border-[var(--text-serif)] bg-[var(--text-serif)] text-[var(--btn-text)] shadow-sm hover:opacity-90 transition-all duration-200 shrink-0 animate-fade-in"
+            >
+              {user.role === 'ADMIN' ? (
+                <>
+                  <ShieldAlert className="h-4 w-4 shrink-0" />
+                  <span>Admin Panel</span>
+                </>
+              ) : (
+                <>
+                  <LayoutDashboard className="h-4 w-4 shrink-0" />
+                  <span>Student Portal</span>
+                </>
+              )}
+            </Link>
+          )}
         </div>
 
       </div>

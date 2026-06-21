@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../utils/api';
-import { Calendar, User, Award, CreditCard, Sparkles } from 'lucide-react';
+import { Calendar, User, Award, CreditCard, Sparkles, Plus } from 'lucide-react';
 
 export default function WorkshopsConferences() {
   const [courses, setCourses] = useState([]);
@@ -10,28 +10,23 @@ export default function WorkshopsConferences() {
   const [paymentStep, setPaymentStep] = useState('idle');
   const [paymentId, setPaymentId] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form, setForm] = useState({ title: '', description: '', duration: '', price: '0', thumbnail: '' });
   const navigate = useNavigate();
 
-  const events = [
-    {
-      title: 'Generative AI & LLM Conference',
-      date: 'July 15, 2026',
-      fee: '₹999',
-      speakers: ['Dr. A. Srinivas (AI Research Lead)', 'Ms. Neha Rao (LLM Developer)'],
-      certInfo: 'Industry-recognized digital certificate with scanned QR verification.',
-      image: 'https://images.unsplash.com/photo-1591453089816-0fbb971b454c?w=500&q=80'
-    },
-    {
-      title: 'Secure Full-Stack Architectures Seminar',
-      date: 'August 02, 2026',
-      fee: 'Free (Registration required)',
-      speakers: ['Mr. David K. (Principal Architect, Darshi Tech)'],
-      certInfo: 'Participation badges issued to active attendees.',
-      image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&q=80'
-    }
-  ];
-
   useEffect(() => {
+    // Check if user is admin
+    const userJson = localStorage.getItem('darshi_user');
+    if (userJson) {
+      try {
+        const user = JSON.parse(userJson);
+        setIsAdmin(user.role === 'ADMIN');
+      } catch (e) {
+        console.error('Error parsing user info', e);
+      }
+    }
+
     api.getCourses('Workshops')
       .then((data) => {
         setCourses(data);
@@ -42,6 +37,33 @@ export default function WorkshopsConferences() {
         setLoading(false);
       });
   }, []);
+
+  const handleCreateWorkshop = async (e) => {
+    e.preventDefault();
+    try {
+      setErrorMessage('');
+      await api.createCourse({
+        title: form.title,
+        description: form.description,
+        duration: form.duration,
+        price: Number(form.price) || 0,
+        thumbnail: form.thumbnail || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&q=80',
+        category: 'Workshops',
+        status: 'ACTIVE'
+      });
+      setIsModalOpen(false);
+      setForm({ title: '', description: '', duration: '', price: '0', thumbnail: '' });
+      
+      // Refresh list
+      setLoading(true);
+      const data = await api.getCourses('Workshops');
+      setCourses(data);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setErrorMessage(err.message || 'Failed to create workshop/seminar.');
+    }
+  };
 
   const handleEnrollClick = (course) => {
     const userJson = localStorage.getItem('darshi_user');
@@ -84,39 +106,22 @@ export default function WorkshopsConferences() {
         <p className="text-theme-muted text-base uppercase tracking-wider">Attend our live panels and hackathons</p>
       </div>
 
-      {/* Events Board */}
-      <section className="space-y-6">
-        <h2 className="font-serif text-2xl font-light text-theme-title">Upcoming Global Seminars</h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          {events.map((event, i) => (
-            <div key={i} className="glass-panel overflow-hidden flex flex-col justify-between">
-              <img src={event.image} alt={event.title} className="w-full h-48 object-cover border-b border-theme-border" />
-              <div className="p-6 space-y-4 flex-grow flex flex-col justify-between">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-base text-theme-muted font-bold uppercase tracking-wider">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="h-4 w-4 text-theme-title" />
-                      {event.date}
-                    </span>
-                  </div>
-                  <h3 className="font-serif text-xl font-bold text-theme-card-title">{event.title}</h3>
-                </div>
-
-                <div className="space-y-1 pt-2 border-t border-theme-border text-base text-theme-desc flex items-start gap-1.5">
-                  <Award className="h-4 w-4 text-theme-title" shrink-0 />
-                  <span>{event.certInfo}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Database workshops list */}
-      <section className="space-y-6 pt-6 border-t border-theme-border">
-        <div>
-          <h2 className="font-serif text-2xl font-light text-theme-title">Join Active Live Workshops</h2>
-          <p className="text-theme-muted text-base uppercase tracking-wider">Directly register in our active training panels</p>
+      <section className="space-y-6 pt-6">
+        <div className="flex justify-between items-center gap-4">
+          <div>
+            <h2 className="font-serif text-2xl font-light text-theme-title">Join Active Live Workshops</h2>
+            <p className="text-theme-muted text-base uppercase tracking-wider">Directly register in our active training panels</p>
+          </div>
+          {isAdmin && (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="btn-gold px-4 py-2 flex items-center gap-1.5 shrink-0"
+            >
+              <Plus className="h-4 w-4" />
+              Add Workshop / Seminar
+            </button>
+          )}
         </div>
 
         {loading ? (
@@ -224,6 +229,98 @@ export default function WorkshopsConferences() {
                 </button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Create Workshop Modal for Admin */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md border border-theme-border bg-theme-card p-6 shadow-2xl space-y-4 rounded-2xl relative">
+            <h3 className="font-serif text-lg font-bold text-theme-title border-b border-theme-border pb-3 uppercase tracking-wider">Add New Workshop / Seminar</h3>
+            
+            <form onSubmit={handleCreateWorkshop} className="space-y-4 text-base">
+              <div>
+                <label className="text-base font-bold text-theme-muted uppercase block mb-1">Title</label>
+                <input
+                  type="text"
+                  required
+                  value={form.title}
+                  onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  className="w-full bg-theme-card border border-theme-border rounded-xl px-4 py-2.5 text-theme-body focus:outline-none focus:border-theme-title"
+                  placeholder="e.g. Generative AI Hands-on Workshop"
+                />
+              </div>
+
+              <div>
+                <label className="text-base font-bold text-theme-muted uppercase block mb-1">Description</label>
+                <textarea
+                  required
+                  rows="3"
+                  value={form.description}
+                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                  className="w-full bg-theme-card border border-theme-border rounded-xl px-4 py-2.5 text-theme-body focus:outline-none focus:border-theme-title resize-none"
+                  placeholder="Workshop agenda, learning objectives..."
+                ></textarea>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-base font-bold text-theme-muted uppercase block mb-1">Duration</label>
+                  <input
+                    type="text"
+                    required
+                    value={form.duration}
+                    onChange={(e) => setForm({ ...form, duration: e.target.value })}
+                    className="w-full bg-theme-card border border-theme-border rounded-xl px-4 py-2.5 text-theme-body focus:outline-none focus:border-theme-title"
+                    placeholder="e.g. 3 Hours"
+                  />
+                </div>
+                <div>
+                  <label className="text-base font-bold text-theme-muted uppercase block mb-1">Price (INR)</label>
+                  <input
+                    type="number"
+                    required
+                    value={form.price}
+                    onChange={(e) => setForm({ ...form, price: e.target.value })}
+                    className="w-full bg-theme-card border border-theme-border rounded-xl px-4 py-2.5 text-theme-body focus:outline-none focus:border-theme-title"
+                    placeholder="0 for Free"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-base font-bold text-theme-muted uppercase block mb-1">Thumbnail URL</label>
+                <input
+                  type="url"
+                  value={form.thumbnail}
+                  onChange={(e) => setForm({ ...form, thumbnail: e.target.value })}
+                  className="w-full bg-theme-card border border-theme-border rounded-xl px-4 py-2.5 text-theme-body focus:outline-none focus:border-theme-title"
+                  placeholder="https://images.unsplash.com/photo-..."
+                />
+              </div>
+
+              {errorMessage && <p className="text-sm text-red-500 font-semibold">{errorMessage}</p>}
+
+              <div className="flex gap-3 pt-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    setErrorMessage('');
+                  }}
+                  className="flex-1 btn-outline-gold py-2.5 px-4"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 btn-gold py-2.5 px-4"
+                >
+                  Create Workshop
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

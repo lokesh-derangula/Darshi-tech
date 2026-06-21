@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { Award, Code, CheckCircle, Users, MapPin, ArrowRight, Quote } from 'lucide-react';
 import { Globe3D } from '../components/ui/3d-globe';
-import { AnimatedTestimonials } from '../components/ui/animated-testimonials';
 
 const sampleMarkers = [
   {
@@ -132,30 +131,9 @@ export default function Home() {
     { label: 'EXPERT TRAINERS', value: '20+', icon: Award },
   ];
 
-  const testimonials = [
-    {
-      name: 'Rohan Sharma',
-      role: 'NLP Research Intern',
-      review: 'Darshi Tech provided exceptional research mentorship. Building LLM-based solutions was incredibly rewarding and helped me secure my masters position.',
-      src: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=250&auto=format&fit=crop'
-    },
-    {
-      name: 'Priya Patel',
-      role: 'Full Stack Developer',
-      review: 'The structured curricula and hand-on projects were amazing. I gained experience in React, Node.js, and DB design that standard courses lack.',
-      src: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=250&auto=format&fit=crop'
-    },
-    {
-      name: 'Abhishek Kumar',
-      role: 'Android Dev Graduate',
-      review: 'Loved the live doubt sessions and the final certification. The QR code verification let me showcase my work to recruiters with ease.',
-      src: 'https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=250&auto=format&fit=crop'
-    },
-  ];
-
   const showcaseCategories = [
-    { title: 'Research Projects and Internships', path: '/research-projects', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
-    { title: 'Full Stack Projects and Internships', path: '/full-stack-projects', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
+    { title: 'Research Projects and Internships for all graduates and students', path: '/research-projects', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
+    { title: 'Full Stack Projects and Internships for all graduates and students', path: '/full-stack-projects', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
     { title: 'Product Development', path: '/product-development', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
   ];
 
@@ -341,18 +319,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Testimonials */}
-      <section className="bg-theme-card border border-theme-border text-theme-body p-8 md:p-12 rounded-2xl shadow-md space-y-8 relative overflow-hidden z-10 transition-colors duration-300">
-        <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:32px_32px]"></div>
-        <div className="relative z-10 text-center space-y-2">
-          <h2 className="font-serif text-3xl md:text-4xl font-light text-theme-title">Investor & Graduate Reviews</h2>
-          <p className="text-theme-muted text-base uppercase tracking-wider">Verified testimonials from our active community</p>
-        </div>
 
-        <div className="relative z-10">
-          <AnimatedTestimonials testimonials={testimonials} autoplay={true} />
-        </div>
-      </section>
 
       {/* Workspace Gallery */}
       <section className="space-y-6 pt-6 relative z-10">
