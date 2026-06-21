@@ -1,8 +1,27 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, ShieldAlert, LayoutDashboard } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, ShieldAlert, LayoutDashboard, LogOut, ChevronDown, User } from 'lucide-react';
 
-export default function TopBanner({ theme, setTheme, toggleSidebar, isSidebarOpen, user }) {
+export default function TopBanner({ theme, setTheme, toggleSidebar, isSidebarOpen, user, onLogout }) {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogoutClick = () => {
+    setIsDropdownOpen(false);
+    onLogout();
+    navigate('/login');
+  };
   return (
     <div
       className="fixed top-0 left-0 right-0 z-50 w-full shadow-2xl transition-all duration-300"
@@ -136,7 +155,7 @@ export default function TopBanner({ theme, setTheme, toggleSidebar, isSidebarOpe
           </div>
         </div>
 
-        {/* ─── RIGHT: Theme Toggle & Phone Numbers & Dashboard ─── */}
+        {/* ─── RIGHT: Theme Toggle & Phone Numbers & Dashboard Dropdown ─── */}
         <div className="flex items-center gap-4 shrink-0 ml-4">
           {/* Theme Toggle Button */}
           <button
@@ -203,24 +222,53 @@ export default function TopBanner({ theme, setTheme, toggleSidebar, isSidebarOpe
             </div>
           </div>
 
-          {/* Dashboard Entry Points */}
-          {user && (
+          {/* Unified Auth Dropdown Button */}
+          {!user ? (
             <Link
-              to={user.role === 'ADMIN' ? '/admin-dashboard' : '/student-dashboard'}
-              className="flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold tracking-wide uppercase border border-[var(--text-serif)] bg-[var(--text-serif)] text-[var(--btn-text)] shadow-sm hover:opacity-90 transition-all duration-200 shrink-0 animate-fade-in"
+              to="/login"
+              className="flex items-center gap-2 rounded-full px-4 py-2.5 text-xs font-semibold tracking-wide uppercase border border-[var(--text-serif)] bg-[var(--text-serif)] text-[var(--btn-text)] shadow-sm hover:opacity-90 transition-all duration-200 shrink-0"
             >
-              {user.role === 'ADMIN' ? (
-                <>
-                  <ShieldAlert className="h-4 w-4 shrink-0" />
-                  <span>Admin Panel</span>
-                </>
-              ) : (
-                <>
-                  <LayoutDashboard className="h-4 w-4 shrink-0" />
-                  <span>Student Portal</span>
-                </>
-              )}
+              <User className="h-4 w-4" />
+              <span>Student Login</span>
             </Link>
+          ) : (
+            <div className="relative shrink-0" ref={dropdownRef}>
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center gap-2.5 rounded-full px-4 py-2.5 text-xs font-semibold tracking-wide uppercase border border-[var(--text-serif)] bg-[var(--text-serif)] text-[var(--btn-text)] shadow-sm hover:opacity-90 transition-all duration-200"
+              >
+                <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--btn-text)] font-serif text-[10px] font-bold text-[var(--text-serif)] uppercase">
+                  {user.name.charAt(0)}
+                </div>
+                <span className="max-w-[100px] truncate">{user.name}</span>
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Dropdown Menu */}
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2.5 w-48 rounded-xl border border-theme-border bg-theme-card p-1.5 shadow-2xl z-50 text-xs font-semibold tracking-wide uppercase animate-fade-in">
+                  <Link
+                    to={user.role === 'ADMIN' ? '/admin-dashboard' : '/student-dashboard'}
+                    onClick={() => setIsDropdownOpen(false)}
+                    className="flex w-full items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-theme-body hover:bg-[var(--sidebar-hover-bg)] hover:text-theme-title transition-colors"
+                  >
+                    {user.role === 'ADMIN' ? (
+                      <ShieldAlert className="h-4 w-4 text-[var(--text-serif)]" />
+                    ) : (
+                      <LayoutDashboard className="h-4 w-4 text-[var(--text-serif)]" />
+                    )}
+                    <span>Dashboard</span>
+                  </Link>
+                  <button
+                    onClick={handleLogoutClick}
+                    className="flex w-full items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </div>
 

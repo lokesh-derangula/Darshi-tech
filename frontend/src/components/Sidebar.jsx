@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   Menu,
   Home,
@@ -10,11 +10,7 @@ import {
   GraduationCap,
   BookOpen,
   Calendar,
-  Phone,
-  LayoutDashboard,
-  LogOut,
-  User,
-  ShieldAlert
+  Phone
 } from 'lucide-react';
 
 export default function Sidebar({ isOpen, toggleSidebar, user, onLogout, bannerHeight = 0, theme }) {
@@ -96,65 +92,7 @@ export default function Sidebar({ isOpen, toggleSidebar, user, onLogout, bannerH
           })}
         </nav>
 
-        {/* Sidebar Footer (included in scrollable container) */}
-        <div className="p-3 mt-6 border-t transition-colors duration-300" style={{ borderTopColor: 'var(--sidebar-border)', backgroundColor: theme === 'bright' ? 'rgba(0,0,0,0.02)' : 'rgba(8,9,13,0.4)' }}>
-          {user ? (
-            <div className="flex flex-col gap-2">
-              {/* Profile Info & Logout */}
-              {isOpen ? (
-                <div className="flex items-center justify-between gap-2 px-2 py-2 border rounded-xl border-dashed border-[var(--sidebar-border)] bg-black/5 dark:bg-white/5 transition-all duration-300">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--text-serif)] font-serif text-sm font-bold text-[var(--btn-text)] uppercase transition-colors duration-300" title={user.name}>
-                      {user.name.charAt(0)}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="truncate text-xs font-bold text-theme-body">{user.name}</p>
-                      <p className="truncate text-[9px] font-bold text-theme-muted uppercase tracking-wider">{user.role}</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => {
-                      onLogout();
-                      navigate('/login');
-                    }}
-                    className="rounded-full p-2 text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors shrink-0"
-                    title="Sign Out"
-                  >
-                    <LogOut className="h-4.5 w-4.5" />
-                  </button>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center gap-3 py-2 transition-all duration-300">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--text-serif)] font-serif text-sm font-bold text-[var(--btn-text)] uppercase transition-colors duration-300" title={`${user.name} (${user.role})`}>
-                    {user.name.charAt(0)}
-                  </div>
-                  <button
-                    onClick={() => {
-                      onLogout();
-                      navigate('/login');
-                    }}
-                    className="rounded-full p-2 text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
-                    title="Sign Out"
-                  >
-                    <LogOut className="h-4 w-4" />
-                  </button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="space-y-1">
-              <NavLink
-                to="/login"
-                className="flex items-center gap-4 rounded-full px-4 py-3 text-xs font-semibold tracking-wide uppercase text-[var(--text-serif)] hover:bg-[var(--btn-outline-hover-bg)] border border-[var(--btn-outline-border)] hover:border-[var(--text-serif)] transition-all duration-300"
-              >
-                <User className="h-4 w-4 shrink-0 text-[var(--text-serif)]" />
-                <span className={`transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 w-0 pointer-events-none'}`}>
-                  Student Login
-                </span>
-              </NavLink>
-            </div>
-          )}
-        </div>
+
       </div>
     </aside>
   );

@@ -93,7 +93,7 @@ export default function App() {
       <div className="min-h-screen bg-mesh text-theme-body relative overflow-hidden transition-colors duration-300">
 
         {/* ── Fixed Company Banner ── */}
-        <TopBanner theme={theme} setTheme={setTheme} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} isSidebarOpen={isSidebarOpen} user={user} />
+        <TopBanner theme={theme} setTheme={setTheme} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} isSidebarOpen={isSidebarOpen} user={user} onLogout={handleLogout} />
 
         {/* Floating background blobs — pushed down by banner, hidden in bright mode */}
         {theme === 'dark' && (

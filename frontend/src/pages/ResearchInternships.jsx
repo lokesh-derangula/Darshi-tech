@@ -21,7 +21,7 @@ export default function ResearchInternships() {
     { title: 'ML/DL', duration: '12 Weeks', prerequisites: 'Python, Linear Algebra, Statistics', fee: 2500 },
     { title: 'Transformers', duration: '6 Weeks', prerequisites: 'Deep Learning Basics, PyTorch', fee: 2500 },
     { title: 'Cyber Security', duration: '8 Weeks', prerequisites: 'Linux Basics, Networking Fundamentals', fee: 2500 },
-    { title: 'Data Management', duration: '6 Weeks', prerequisites: 'SQL, Relational Databases, Python', fee: 2500 },
+    { title: 'dataBase Management Systems', duration: '6 Weeks', prerequisites: 'SQL, Relational Databases, Python', fee: 2500 },
     { title: 'Robotics', duration: '10 Weeks', prerequisites: 'C++, Python, Basic Microcontrollers', fee: 2500 },
   ];
 
