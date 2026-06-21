@@ -14,8 +14,6 @@ import {
 } from 'lucide-react';
 
 export default function Sidebar({ isOpen, toggleSidebar, user, onLogout, bannerHeight = 0, theme }) {
-  const navigate = useNavigate();
-
   const menuItems = [
     { path: '/', label: 'Home', icon: Home },
     { path: '/product-development', label: 'Product Development', icon: Cpu },

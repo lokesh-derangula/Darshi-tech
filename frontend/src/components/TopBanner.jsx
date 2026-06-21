@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, ShieldAlert, LayoutDashboard, LogOut, ChevronDown, User } from 'lucide-react';
+import { Menu, ShieldAlert, LayoutDashboard, LogOut, User } from 'lucide-react';
 
 export default function TopBanner({ theme, setTheme, toggleSidebar, isSidebarOpen, user, onLogout }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -241,7 +241,6 @@ export default function TopBanner({ theme, setTheme, toggleSidebar, isSidebarOpe
                   {user.name.charAt(0)}
                 </div>
                 <span className="max-w-[100px] truncate">{user.name}</span>
-                <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {/* Dropdown Menu */}
