@@ -6,7 +6,7 @@ const getTransporter = () => {
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
 
-  if (!host || !user || !pass) {
+  if (!host || !user || !pass || user.includes('your-email') || pass.includes('your-app-password')) {
     return null;
   }
 
