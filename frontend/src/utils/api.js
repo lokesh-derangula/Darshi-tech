@@ -215,6 +215,19 @@ export const api = {
       headers: getHeaders(),
     }).then(handleResponse),
 
+  createAdminStudent: (studentData) =>
+    fetch(`${API_BASE}/admin/students`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(studentData),
+    }).then(handleResponse),
+
+  deleteAdminStudent: (studentId) =>
+    fetch(`${API_BASE}/admin/students/${studentId}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    }).then(handleResponse),
+
   getAdminPayments: () =>
     fetch(`${API_BASE}/admin/payments`, {
       method: 'GET',

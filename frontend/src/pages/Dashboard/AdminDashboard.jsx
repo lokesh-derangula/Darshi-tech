@@ -31,6 +31,9 @@ export default function AdminDashboard() {
   const [isClassModalOpen, setIsClassModalOpen] = useState(false);
   const [classForm, setClassForm] = useState({ courseId: '', title: '', meetingLink: '', date: '', time: '' });
 
+  const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
+  const [studentForm, setStudentForm] = useState({ name: '', email: '', phone: '', password: '', college: '', branch: '', year: '1st Year' });
+
   const [selectedClassAttendance, setSelectedClassAttendance] = useState(null);
   const [attendanceSheet, setAttendanceSheet] = useState([]);
   const [isAttendanceModalOpen, setIsAttendanceModalOpen] = useState(false);
@@ -79,6 +82,28 @@ export default function AdminDashboard() {
       fetchAdminData();
     } catch (err) {
       alert(err.message || 'Failed to delete course.');
+    }
+  };
+
+  const handleCreateStudent = async (e) => {
+    e.preventDefault();
+    try {
+      await api.createAdminStudent(studentForm);
+      setIsStudentModalOpen(false);
+      setStudentForm({ name: '', email: '', phone: '', password: '', college: '', branch: '', year: '1st Year' });
+      fetchAdminData();
+    } catch (err) {
+      alert(err.message || 'Failed to create student.');
+    }
+  };
+
+  const handleDeleteStudent = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this student account? This will delete all their enrollments and attendance records.')) return;
+    try {
+      await api.deleteAdminStudent(id);
+      fetchAdminData();
+    } catch (err) {
+      alert(err.message || 'Failed to delete student.');
     }
   };
 
@@ -287,7 +312,13 @@ export default function AdminDashboard() {
       {/* Students Tab */}
       {activeTab === 'students' && (
         <section className="space-y-4">
-          <h2 className="font-serif text-xl font-light text-theme-card-title">Registered Students</h2>
+          <div className="flex justify-between items-center">
+            <h2 className="font-serif text-xl font-light text-theme-card-title">Registered Students</h2>
+            <button onClick={() => setIsStudentModalOpen(true)} className="btn-gold">
+              <Plus className="h-4 w-4" />
+              Add Student
+            </button>
+          </div>
           <div className="glass-panel overflow-x-auto shadow-sm">
             <table className="w-full text-left border-collapse text-base">
               <thead>
@@ -299,6 +330,7 @@ export default function AdminDashboard() {
                   <th className="p-4">Branch</th>
                   <th className="p-4">Year</th>
                   <th className="p-4">Status</th>
+                  <th className="p-4 text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-theme-border text-theme-body">
@@ -314,6 +346,14 @@ export default function AdminDashboard() {
                       <span className={`px-2 py-0.5 rounded-full text-base font-bold ${student.isVerified ? 'bg-emerald-950/20 text-emerald-450 border border-emerald-800/40 text-emerald-400' : 'bg-rose-950/20 text-rose-450 border border-rose-800/40 text-rose-400'}`}>
                         {student.isVerified ? 'Verified' : 'Pending'}
                       </span>
+                    </td>
+                    <td className="p-4 text-center">
+                      <button
+                        onClick={() => handleDeleteStudent(student.id)}
+                        className="text-red-600 hover:text-red-800 rounded p-1.5 hover:bg-red-950/20 transition-colors"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -542,6 +582,122 @@ export default function AdminDashboard() {
                   className="flex-1 btn-gold py-2.5 px-4"
                 >
                   Create Course
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add Student Modal */}
+      {isStudentModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md border border-theme-border bg-theme-card p-6 shadow-2xl space-y-4 rounded-2xl">
+            <h3 className="font-serif text-lg font-bold text-theme-title border-b border-theme-border pb-3">Register New Student</h3>
+            
+            <form onSubmit={handleCreateStudent} className="space-y-4 text-base">
+              <div>
+                <label className="text-base font-bold text-theme-muted uppercase block mb-1">Full Name</label>
+                <input
+                  type="text"
+                  required
+                  value={studentForm.name}
+                  onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })}
+                  className="w-full bg-theme-card border border-theme-border rounded-xl px-4 py-2.5 text-theme-body focus:outline-none focus:border-theme-title"
+                  placeholder="e.g. Jane Doe"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-base font-bold text-theme-muted uppercase block mb-1">Email Address</label>
+                  <input
+                    type="email"
+                    required
+                    value={studentForm.email}
+                    onChange={(e) => setStudentForm({ ...studentForm, email: e.target.value })}
+                    className="w-full bg-theme-card border border-theme-border rounded-xl px-4 py-2.5 text-theme-body focus:outline-none focus:border-theme-title"
+                    placeholder="jane@example.com"
+                  />
+                </div>
+                <div>
+                  <label className="text-base font-bold text-theme-muted uppercase block mb-1">Phone Number</label>
+                  <input
+                    type="tel"
+                    required
+                    value={studentForm.phone}
+                    onChange={(e) => setStudentForm({ ...studentForm, phone: e.target.value })}
+                    className="w-full bg-theme-card border border-theme-border rounded-xl px-4 py-2.5 text-theme-body focus:outline-none focus:border-theme-title"
+                    placeholder="9876543210"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-base font-bold text-theme-muted uppercase block mb-1">Password</label>
+                <input
+                  type="password"
+                  required
+                  value={studentForm.password}
+                  onChange={(e) => setStudentForm({ ...studentForm, password: e.target.value })}
+                  className="w-full bg-theme-card border border-theme-border rounded-xl px-4 py-2.5 text-theme-body focus:outline-none focus:border-theme-title"
+                  placeholder="Password"
+                />
+              </div>
+
+              <div>
+                <label className="text-base font-bold text-theme-muted uppercase block mb-1">College / University</label>
+                <input
+                  type="text"
+                  required
+                  value={studentForm.college}
+                  onChange={(e) => setStudentForm({ ...studentForm, college: e.target.value })}
+                  className="w-full bg-theme-card border border-theme-border rounded-xl px-4 py-2.5 text-theme-body focus:outline-none focus:border-theme-title"
+                  placeholder="e.g. IIT Madras"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-base font-bold text-theme-muted uppercase block mb-1">Branch</label>
+                  <input
+                    type="text"
+                    required
+                    value={studentForm.branch}
+                    onChange={(e) => setStudentForm({ ...studentForm, branch: e.target.value })}
+                    className="w-full bg-theme-card border border-theme-border rounded-xl px-4 py-2.5 text-theme-body focus:outline-none focus:border-theme-title"
+                    placeholder="e.g. ECE"
+                  />
+                </div>
+                <div>
+                  <label className="text-base font-bold text-theme-muted uppercase block mb-1">Academic Year</label>
+                  <select
+                    value={studentForm.year}
+                    onChange={(e) => setStudentForm({ ...studentForm, year: e.target.value })}
+                    className="w-full bg-theme-card border border-theme-border rounded-xl px-4 py-3 text-theme-body focus:outline-none"
+                  >
+                    <option value="1st Year" className="bg-theme-card text-theme-body">1st Year</option>
+                    <option value="2nd Year" className="bg-theme-card text-theme-body">2nd Year</option>
+                    <option value="3rd Year" className="bg-theme-card text-theme-body">3rd Year</option>
+                    <option value="4th Year" className="bg-theme-card text-theme-body">4th Year</option>
+                    <option value="Graduated" className="bg-theme-card text-theme-body">Graduated</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-3">
+                <button
+                  type="button"
+                  onClick={() => setIsStudentModalOpen(false)}
+                  className="flex-1 btn-outline-gold py-2.5 px-4"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 btn-gold py-2.5 px-4"
+                >
+                  Create Student
                 </button>
               </div>
             </form>
