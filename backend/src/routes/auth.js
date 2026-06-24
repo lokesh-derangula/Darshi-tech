@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import prisma from '../utils/prisma.js';
 import { authLimiter } from '../middleware/rateLimiter.js';
 import { verifyToken } from '../middleware/auth.js';
+import { sendOTPEmail, sendResetPasswordEmail } from '../utils/mailer.js';
 
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'darshi_tech_super_secret_jwt_key_2026';
@@ -46,11 +47,11 @@ router.post('/register', authLimiter, async (req, res) => {
     });
 
     console.log(`[VERIFICATION EMAIL] Sent OTP to ${email}: ${otpCode}`);
+    await sendOTPEmail(email, otpCode, name);
 
     res.status(201).json({
       message: 'Registration successful! Please verify your email.',
       email: user.email,
-      otpSandbox: otpCode, // Provided for easy developer testing
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -86,10 +87,10 @@ router.post('/login', authLimiter, async (req, res) => {
         data: { otpCode, otpExpiry },
       });
       console.log(`[VERIFICATION EMAIL] Sent OTP to ${email}: ${otpCode}`);
+      await sendOTPEmail(email, otpCode, user.name);
       return res.status(403).json({
         message: 'Email not verified. Verification code has been sent.',
         email: user.email,
-        otpSandbox: otpCode,
         unverified: true,
       });
     }
@@ -182,11 +183,11 @@ router.post('/forgot-password', authLimiter, async (req, res) => {
     });
 
     console.log(`[PASSWORD RESET EMAIL] Sent OTP to ${email}: ${otpCode}`);
+    await sendResetPasswordEmail(email, otpCode, user.name);
 
     res.json({
       message: 'Password reset code sent to email.',
       email: user.email,
-      otpSandbox: otpCode,
     });
   } catch (error) {
     console.error('Forgot password error:', error);

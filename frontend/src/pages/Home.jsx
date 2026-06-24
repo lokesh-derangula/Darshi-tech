@@ -132,8 +132,8 @@ export default function Home() {
   ];
 
   const showcaseCategories = [
-    { title: 'Research Projects and Internships for all graduates and students', path: '/research-projects', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
-    { title: 'Full Stack Projects and Internships for all graduates and students', path: '/full-stack-projects', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
+    { title: 'Research Projects and Internships for all Graduate Students', path: '/research-projects', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
+    { title: 'Full Stack Projects and Internships for all Graduate Students', path: '/full-stack-projects', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
     { title: 'Product Development', path: '/product-development', desc: '', color: 'border-theme-border text-theme-title hover:bg-[var(--text-serif)]/5 bg-theme-card/55' },
   ];
 
@@ -273,7 +273,7 @@ export default function Home() {
           <div className="space-y-4">
             <h2 className="font-serif text-3xl font-light text-theme-title">Institutional Mandate</h2>
             <p className="text-theme-desc leading-relaxed text-base">
-              Darshi Tech is a premier developer ecosystem and training institute focused on bridging the gaps between standard college curriculum and high-performance industry expectations.
+              Darshi Software Solutions Private Limited is a premier developer ecosystem and training institute focused on bridging the gaps between standard college curriculum and high-performance industry expectations.
               We offer structured projects, research labs, and live bootcamps with professional certificates validated on digital registries.
             </p>
           </div>
@@ -331,10 +331,10 @@ export default function Home() {
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {[
             { src: '/images/entrance.png', title: 'Corporate Entrance', desc: 'Secure institutional access and corporate branding' },
-            { src: '/images/office_training.png', title: 'High-Tech Classroom', desc: 'Structured systems for live classes and training' },
             { src: '/images/office_desks.png', title: 'Developer Laboratories', desc: 'Collaborative development desks and sandbox networks' },
             { src: '/images/students_group_1.png', title: 'Interactive Development Cohort', desc: 'Students collaborating on milestone projects inside our training labs' },
-            { src: '/images/students_group_2.png', title: 'Developer Milestone Celebrations', desc: 'Interns celebrating successful production releases and program completions' }
+            { src: '/images/students_group_2.png', title: 'Developer Milestone Celebrations', desc: 'Interns celebrating successful production releases and program completions' },
+            { src: '/images/hardware_lab.png', title: 'Embedded Systems & IoT Innovation Laboratory', desc: 'Students prototyping and working with hardware circuits in our development labs' }
           ].map((item, idx) => (
             <motion.div
               key={idx}

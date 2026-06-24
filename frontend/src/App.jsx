@@ -177,7 +177,7 @@ export default function App() {
 
           {/* Site Footer */}
           <footer className="border-t border-theme-divider bg-theme-card/45 py-6 text-center text-xs text-theme-muted transition-colors duration-300">
-            &copy; {new Date().getFullYear()} DARSHI TECH. All rights reserved. Built with high-security guidelines.
+            &copy; {new Date().getFullYear()} DARSHI SOFTWARE SOLUTIONS PRIVATE LIMITED. All rights reserved. Built with high-security guidelines.
           </footer>
         </main>
       </div>

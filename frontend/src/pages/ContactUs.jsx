@@ -71,7 +71,7 @@ export default function ContactUs() {
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Darshi Tech Location"
+                title="Darshi Software Solutions Private Limited Location"
               />
             </div>
             {/* Address block below map */}

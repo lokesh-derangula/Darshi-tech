@@ -27,8 +27,7 @@ export default function Register() {
       navigate('/verify-email', {
         state: {
           email: formData.email,
-          message: data.message,
-          otpSandbox: data.otpSandbox
+          message: data.message
         }
       });
     } catch (err) {

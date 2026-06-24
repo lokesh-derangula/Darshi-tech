@@ -69,7 +69,7 @@ export default function VerifyCertificate() {
               <span className="text-base font-bold text-theme-title uppercase tracking-widest block bg-theme-title/10 border border-theme-title/20 px-3 py-1 rounded-full w-max mx-auto">
                 ✔ Authenticated Certificate
               </span>
-              <h1 className="font-serif text-2xl font-light text-theme-title pt-3">DARSHI TECH CREDENTIAL</h1>
+              <h1 className="font-serif text-2xl font-light text-theme-title pt-3">DARSHI SOFTWARE SOLUTIONS PRIVATE LIMITED CREDENTIAL</h1>
               <p className="text-theme-desc text-base">This credential has been digitally verified and matches our official records.</p>
             </div>
 

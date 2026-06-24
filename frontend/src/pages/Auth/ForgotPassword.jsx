@@ -8,7 +8,7 @@ export default function ForgotPassword() {
   const [code, setCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [step, setStep] = useState(1);
-  const [otpSandbox, setOtpSandbox] = useState('');
+
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,9 +24,7 @@ export default function ForgotPassword() {
     try {
       const data = await api.forgotPassword(email);
       setSuccess('Reset code generated successfully!');
-      if (data.otpSandbox) {
-        setOtpSandbox(data.otpSandbox);
-      }
+
       setTimeout(() => {
         setStep(2);
         setSuccess('');
@@ -159,23 +157,7 @@ export default function ForgotPassword() {
           </form>
         )}
 
-        {otpSandbox && step === 2 && (
-          <div className="bg-theme-card border border-theme-border p-4 rounded-xl space-y-2 text-base">
-            <span className="text-base text-theme-title font-bold uppercase tracking-wider block">🔑 Sandbox Assist</span>
-            <p className="text-base text-theme-desc">
-              The reset code generated is:{' '}
-              <strong className="text-theme-title bg-theme-card border border-theme-border px-2.5 py-0.5 rounded-full font-mono text-base ml-1">
-                {otpSandbox}
-              </strong>
-            </p>
-            <button
-              onClick={() => setCode(otpSandbox)}
-              className="text-base text-theme-title font-bold underline hover:text-theme-title/80 block"
-            >
-              Auto-fill reset code
-            </button>
-          </div>
-        )}
+
 
         <div className="text-center pt-2">
           <Link to="/login" className="text-base text-theme-title font-bold hover:underline">

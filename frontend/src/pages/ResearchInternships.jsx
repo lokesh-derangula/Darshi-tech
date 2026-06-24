@@ -21,7 +21,7 @@ export default function ResearchInternships() {
     { title: 'ML/DL', duration: '12 Weeks', prerequisites: 'Python, Linear Algebra, Statistics', fee: 2500 },
     { title: 'Transformers', duration: '6 Weeks', prerequisites: 'Deep Learning Basics, PyTorch', fee: 2500 },
     { title: 'Cyber Security', duration: '8 Weeks', prerequisites: 'Linux Basics, Networking Fundamentals', fee: 2500 },
-    { title: 'dataBase Management Systems', duration: '6 Weeks', prerequisites: 'SQL, Relational Databases, Python', fee: 2500 },
+    { title: 'DataBase Management Systems', duration: '6 Weeks', prerequisites: 'SQL, Relational Databases, Python', fee: 2500 },
     { title: 'Robotics', duration: '10 Weeks', prerequisites: 'C++, Python, Basic Microcontrollers', fee: 2500 },
   ];
 
@@ -66,7 +66,7 @@ export default function ResearchInternships() {
     try {
       setPaymentStep('processing');
       let finalCourseId = selectedCourse.id;
-      
+
       if (finalCourseId.startsWith('mock-research-')) {
         const backupCourse = courses[0] || await api.getCourses().then(r => r[0]);
         if (backupCourse) {
@@ -172,7 +172,7 @@ export default function ResearchInternships() {
       {paymentStep !== 'idle' && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="w-full max-w-md border border-theme-border bg-theme-card p-6 shadow-2xl relative rounded-2xl transition-colors duration-300">
-            
+
             {paymentStep === 'checkout' && (
               <div className="space-y-6">
                 <div className="flex items-center gap-2.5 pb-3 border-b border-theme-divider">

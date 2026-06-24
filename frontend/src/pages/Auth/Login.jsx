@@ -52,7 +52,7 @@ export default function Login({ onLogin }) {
           <div className="mx-auto h-12 w-12 border border-theme-title/25 bg-theme-title/10 flex items-center justify-center rounded-full">
             <ShieldCheck className="h-5 w-5 text-theme-title" />
           </div>
-          <h2 className="font-serif text-2xl font-light tracking-tight text-theme-card-title">Sign In To Darshi Tech</h2>
+          <h2 className="font-serif text-2xl font-light tracking-tight text-theme-card-title">Sign In To Darshi Software Solutions Private Limited</h2>
           <p className="text-theme-muted text-base uppercase tracking-wider">Access secure educational portals</p>
         </div>
 
@@ -127,14 +127,7 @@ export default function Login({ onLogin }) {
           </p>
         </div>
 
-        {/* Sandbox accounts helper */}
-        <div className="bg-theme-card border border-theme-border p-4 rounded-xl space-y-2 text-base">
-          <span className="text-base text-theme-title font-bold uppercase tracking-wider block">Sandbox Testing Credentials</span>
-          <div className="space-y-1 text-base text-theme-muted">
-            <p>🔑 <strong className="text-theme-body font-semibold">Admin Account:</strong> admin@darshitech.com / AdminPassword123</p>
-            <p>🎓 <strong className="text-theme-body font-semibold">Student Account:</strong> Register a new account to test OTP verifying, checkout flows, and credentials download.</p>
-          </div>
-        </div>
+
       </div>
     </div>
   );

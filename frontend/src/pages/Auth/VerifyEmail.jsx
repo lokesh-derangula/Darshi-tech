@@ -9,7 +9,7 @@ export default function VerifyEmail() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-  const [otpSandbox, setOtpSandbox] = useState('');
+
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,9 +21,7 @@ export default function VerifyEmail() {
       navigate('/login');
     }
 
-    if (location.state?.otpSandbox) {
-      setOtpSandbox(location.state.otpSandbox);
-    }
+
   }, [location, navigate]);
 
   const handleSubmit = async (e) => {
@@ -101,23 +99,7 @@ export default function VerifyEmail() {
           </button>
         </form>
 
-        {otpSandbox && (
-          <div className="bg-theme-card border border-theme-border p-4 rounded-xl space-y-2 text-base">
-            <span className="text-base text-theme-title font-bold uppercase tracking-wider block">🔑 Development Sandbox Assist</span>
-            <p className="text-base text-theme-desc">
-              The generated verification code is:{' '}
-              <strong className="text-theme-title bg-theme-card border border-theme-border px-2.5 py-1 rounded-full text-base font-mono ml-1">
-                {otpSandbox}
-              </strong>
-            </p>
-            <button
-              onClick={() => setCode(otpSandbox)}
-              className="text-base text-theme-title font-bold underline hover:text-theme-title/80 block"
-            >
-              Auto-fill code
-            </button>
-          </div>
-        )}
+
       </div>
     </div>
   );

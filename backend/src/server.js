@@ -68,11 +68,11 @@ const seedDatabase = async () => {
       const hashedPassword = await bcrypt.hash('AdminPassword123', 12);
       await prisma.user.create({
         data: {
-          name: 'Darshi Tech Admin',
+          name: 'Darshi Software Solutions Private Limited Admin',
           email: adminEmail,
           phone: '9876543210',
           password: hashedPassword,
-          college: 'Darshi Tech Corporate',
+          college: 'Darshi Software Solutions Private Limited Corporate',
           branch: 'Administration',
           year: 'NA',
           role: 'ADMIN',

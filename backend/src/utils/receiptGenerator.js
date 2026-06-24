@@ -158,7 +158,7 @@ export const generateReceiptPDF = (writeStream, enrollment) => {
   // Seal / Signatory indicator
   doc.circle(85, footerY + 50, 25).lineWidth(1).stroke('#a0aec0');
   doc.font('Helvetica-Bold').fontSize(5.5).fillColor('#a0aec0')
-    .text('DARSHI TECH', 65, footerY + 42, { width: 40, align: 'center' })
+    .text('DARSHI SOFTWARE', 65, footerY + 42, { width: 40, align: 'center' })
     .text('PAID SEAL', 65, footerY + 50, { width: 40, align: 'center' })
     .text('ELECTRONIC', 65, footerY + 58, { width: 40, align: 'center' });
 
