@@ -24,11 +24,9 @@ export default function Register() {
 
     try {
       const data = await api.register(formData);
-      navigate('/verify-email', {
+      navigate('/login', {
         state: {
-          email: formData.email,
-          message: data.message,
-          devOtp: data.devOtp
+          message: 'Registration successful! You can now log in.'
         }
       });
     } catch (err) {

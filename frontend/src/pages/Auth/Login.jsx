@@ -31,14 +31,7 @@ export default function Login({ onLogin }) {
     } catch (err) {
       console.error(err);
       
-      if (err.data && err.data.unverified) {
-        setError(err.message);
-        setTimeout(() => {
-          navigate('/verify-email', { state: { email, devOtp: err.data.devOtp } });
-        }, 1500);
-      } else {
-        setError(err.message || 'Login failed. Please check your credentials.');
-      }
+      setError(err.message || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }

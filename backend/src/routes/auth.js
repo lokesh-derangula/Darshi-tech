@@ -27,8 +27,6 @@ router.post('/register', authLimiter, async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const otpCode = generateOTP();
-    const otpExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
     const user = await prisma.user.create({
       data: {
@@ -39,20 +37,14 @@ router.post('/register', authLimiter, async (req, res) => {
         college,
         branch,
         year,
-        isVerified: false,
-        otpCode,
-        otpExpiry,
+        isVerified: true,
         role: 'STUDENT',
       },
     });
 
-    console.log(`[VERIFICATION EMAIL] Sent OTP to ${email}: ${otpCode}`);
-    const emailSent = await sendOTPEmail(email, otpCode, name);
-
     res.status(201).json({
-      message: 'Registration successful! Please verify your email.',
+      message: 'Registration successful! You can now log in.',
       email: user.email,
-      ...(!emailSent ? { devOtp: otpCode } : {})
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -79,23 +71,7 @@ router.post('/login', authLimiter, async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials.' });
     }
 
-    if (!user.isVerified) {
-      // Regenerate OTP and send if not verified
-      const otpCode = generateOTP();
-      const otpExpiry = new Date(Date.now() + 60 * 60 * 1000);
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { otpCode, otpExpiry },
-      });
-      console.log(`[VERIFICATION EMAIL] Sent OTP to ${email}: ${otpCode}`);
-      const emailSent = await sendOTPEmail(email, otpCode, user.name);
-      return res.status(403).json({
-        message: 'Email not verified. Verification code has been sent.',
-        email: user.email,
-        unverified: true,
-        ...(!emailSent ? { devOtp: otpCode } : {})
-      });
-    }
+
 
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role, name: user.name },
