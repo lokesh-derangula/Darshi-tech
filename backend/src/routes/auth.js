@@ -47,11 +47,12 @@ router.post('/register', authLimiter, async (req, res) => {
     });
 
     console.log(`[VERIFICATION EMAIL] Sent OTP to ${email}: ${otpCode}`);
-    await sendOTPEmail(email, otpCode, name);
+    const emailSent = await sendOTPEmail(email, otpCode, name);
 
     res.status(201).json({
       message: 'Registration successful! Please verify your email.',
       email: user.email,
+      ...(!emailSent ? { devOtp: otpCode } : {})
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -87,11 +88,12 @@ router.post('/login', authLimiter, async (req, res) => {
         data: { otpCode, otpExpiry },
       });
       console.log(`[VERIFICATION EMAIL] Sent OTP to ${email}: ${otpCode}`);
-      await sendOTPEmail(email, otpCode, user.name);
+      const emailSent = await sendOTPEmail(email, otpCode, user.name);
       return res.status(403).json({
         message: 'Email not verified. Verification code has been sent.',
         email: user.email,
         unverified: true,
+        ...(!emailSent ? { devOtp: otpCode } : {})
       });
     }
 
@@ -183,11 +185,12 @@ router.post('/forgot-password', authLimiter, async (req, res) => {
     });
 
     console.log(`[PASSWORD RESET EMAIL] Sent OTP to ${email}: ${otpCode}`);
-    await sendResetPasswordEmail(email, otpCode, user.name);
+    const emailSent = await sendResetPasswordEmail(email, otpCode, user.name);
 
     res.json({
       message: 'Password reset code sent to email.',
       email: user.email,
+      ...(!emailSent ? { devOtp: otpCode } : {})
     });
   } catch (error) {
     console.error('Forgot password error:', error);

@@ -1,24 +1,41 @@
 import nodemailer from 'nodemailer';
 
 const getTransporter = () => {
+  const service = process.env.SMTP_SERVICE;
   const host = process.env.SMTP_HOST;
   const port = parseInt(process.env.SMTP_PORT, 10) || 587;
   const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
 
-  if (!host || !user || !pass || user.includes('your-email') || pass.includes('your-app-password')) {
+  if (!user || !pass || user.includes('your-email') || pass.includes('your-app-password')) {
     return null;
   }
 
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465, // true for 465, false for other ports
+  const transportConfig = {
     auth: {
       user,
       pass,
     },
-  });
+  };
+
+  if (service) {
+    transportConfig.service = service;
+  } else if (host) {
+    if (host.includes('gmail.com')) {
+      transportConfig.service = 'gmail';
+    } else {
+      transportConfig.host = host;
+      transportConfig.port = port;
+      transportConfig.secure = port === 465;
+      transportConfig.tls = {
+        rejectUnauthorized: false
+      };
+    }
+  } else {
+    return null;
+  }
+
+  return nodemailer.createTransport(transportConfig);
 };
 
 /**
@@ -111,6 +128,28 @@ export const sendResetPasswordEmail = async (email, otpCode, name = '') => {
     return true;
   } catch (error) {
     console.error(`[MAILER ERROR] Failed to send password reset email to ${email}:`, error);
+    return false;
+  }
+};
+
+/**
+ * Verifies the SMTP configuration.
+ * @returns {Promise<boolean>}
+ */
+export const verifySMTP = async () => {
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.warn('\n⚠️  [SMTP Mailer] SMTP is not configured or uses default placeholders. Real emails will NOT be sent.');
+    console.warn('   To enable real email verification, please set SMTP_USER and SMTP_PASS in backend/.env.\n');
+    return false;
+  }
+
+  try {
+    await transporter.verify();
+    console.log('\n✔  [SMTP Mailer] SMTP Server connection verified successfully. Ready to send emails!\n');
+    return true;
+  } catch (error) {
+    console.error(`\n❌ [SMTP Mailer] SMTP Connection verification failed: ${error.message}\n`);
     return false;
   }
 };

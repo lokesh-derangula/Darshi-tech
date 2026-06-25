@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../../utils/api';
-import { KeyRound, Mail, AlertTriangle, CheckCircle } from 'lucide-react';
+import { KeyRound, Mail, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [step, setStep] = useState(1);
+  const [devOtp, setDevOtp] = useState('');
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -24,6 +25,9 @@ export default function ForgotPassword() {
     try {
       const data = await api.forgotPassword(email);
       setSuccess('Reset code generated successfully!');
+      if (data.devOtp) {
+        setDevOtp(data.devOtp);
+      }
 
       setTimeout(() => {
         setStep(2);
@@ -115,6 +119,15 @@ export default function ForgotPassword() {
           </form>
         ) : (
           <form onSubmit={handleResetPassword} className="space-y-4 text-base">
+            {devOtp && (
+              <div className="flex gap-2 items-start text-base text-amber-400 bg-amber-950/20 border border-amber-800/40 p-3 rounded-xl mb-2">
+                <Info className="h-4 w-4 shrink-0 mt-0.5" />
+                <span>
+                  <strong>[Dev Mode]</strong> SMTP not configured. Use OTP code:{' '}
+                  <strong className="text-theme-title select-all">{devOtp}</strong>
+                </span>
+              </div>
+            )}
             <div className="space-y-1.5">
               <label className="text-base font-bold text-theme-muted uppercase tracking-wider block">6-Digit Reset Code</label>
               <input

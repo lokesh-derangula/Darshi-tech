@@ -16,6 +16,7 @@ import enrollmentRoutes from './routes/enrollments.js';
 import classRoutes from './routes/classes.js';
 import certificateRoutes from './routes/certificates.js';
 import adminRoutes from './routes/admin.js';
+import { verifySMTP } from './utils/mailer.js';
 
 dotenv.config();
 
@@ -227,4 +228,5 @@ const seedDatabase = async () => {
 app.listen(PORT, async () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   await seedDatabase();
+  await verifySMTP();
 });

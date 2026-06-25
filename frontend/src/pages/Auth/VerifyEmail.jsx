@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { api } from '../../utils/api';
-import { ShieldAlert, Check, AlertTriangle } from 'lucide-react';
+import { ShieldAlert, Check, AlertTriangle, Info } from 'lucide-react';
 
 export default function VerifyEmail() {
   const [email, setEmail] = useState('');
@@ -69,6 +69,16 @@ export default function VerifyEmail() {
           <div className="flex gap-2 items-start text-base text-emerald-400 bg-emerald-950/20 border border-emerald-800/40 p-3 rounded-xl">
             <Check className="h-4 w-4 shrink-0 mt-0.5" />
             <span>{success}</span>
+          </div>
+        )}
+
+        {location.state?.devOtp && (
+          <div className="flex gap-2 items-start text-base text-amber-400 bg-amber-950/20 border border-amber-800/40 p-3 rounded-xl">
+            <Info className="h-4 w-4 shrink-0 mt-0.5" />
+            <span>
+              <strong>[Dev Mode]</strong> SMTP not configured. Use OTP code:{' '}
+              <strong className="text-theme-title select-all">{location.state.devOtp}</strong>
+            </span>
           </div>
         )}
 
