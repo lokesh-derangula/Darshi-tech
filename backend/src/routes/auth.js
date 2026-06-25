@@ -26,7 +26,7 @@ router.post('/register', authLimiter, async (req, res) => {
       return res.status(400).json({ message: 'Email already registered.' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
       data: {
@@ -192,7 +192,7 @@ router.post('/reset-password', async (req, res) => {
       return res.status(400).json({ message: 'Invalid or expired reset code.' });
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     await prisma.user.update({
       where: { id: user.id },

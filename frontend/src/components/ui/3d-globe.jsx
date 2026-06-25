@@ -61,7 +61,7 @@ export function Globe3D({ markers = [], config = {}, onMarkerClick }) {
       const bumpTex = texLoader.load('https://threejs.org/examples/textures/earth_normal_2048.jpg');
       const specTex = texLoader.load('https://threejs.org/examples/textures/earth_specular_2048.jpg');
 
-      const earthGeo = new THREE.SphereGeometry(R, 64, 64);
+      const earthGeo = new THREE.SphereGeometry(R, 36, 36);
       const earthMat = new THREE.MeshPhongMaterial({
         map: earthTex,
         bumpMap: bumpTex,
@@ -73,7 +73,7 @@ export function Globe3D({ markers = [], config = {}, onMarkerClick }) {
       const earth = new THREE.Mesh(earthGeo, earthMat);
       scene.add(earth);
 
-      const atmGeo = new THREE.SphereGeometry(R * 1.07, 64, 64);
+      const atmGeo = new THREE.SphereGeometry(R * 1.07, 36, 36);
       const atmMat = new THREE.MeshPhongMaterial({
         color: sunColor,
         transparent: true,

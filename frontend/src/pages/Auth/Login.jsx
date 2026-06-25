@@ -111,13 +111,14 @@ export default function Login({ onLogin }) {
           </button>
         </form>
 
-        <div className="text-center pt-2">
-          <p className="text-base text-theme-muted">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-theme-title font-bold hover:underline">
-              Create student account
-            </Link>
-          </p>
+        <div className="text-center pt-4 border-t border-theme-border mt-4">
+          <p className="text-base text-theme-muted mb-3">Don't have an account?</p>
+          <Link
+            to="/register"
+            className="w-full btn-outline-gold py-3.5 flex items-center justify-center gap-2 font-bold transition-all text-xs"
+          >
+            Create student account
+          </Link>
         </div>
 
 

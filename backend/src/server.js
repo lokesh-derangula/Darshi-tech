@@ -66,7 +66,7 @@ const seedDatabase = async () => {
     const existingAdmin = await prisma.user.findUnique({ where: { email: adminEmail } });
 
     if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash('AdminPassword123', 12);
+      const hashedPassword = await bcrypt.hash('AdminPassword123', 10);
       await prisma.user.create({
         data: {
           name: 'Darshi Software Solutions Private Limited Admin',

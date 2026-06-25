@@ -136,13 +136,15 @@
   border-radius: 16px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  @apply shadow-sm transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)];
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
 }
 
 .glass-panel:hover {
-  transform: translateY(-6px) scale(1.025);
+  transform: translateY(-4px);
   border-color: var(--text-serif);
-  box-shadow: 0 15px 35px rgba(30, 46, 48, 0.08), 0 0 20px rgba(30, 46, 48, 0.03);
+  box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .glass-panel-premium {
@@ -151,12 +153,14 @@
   border-radius: 16px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  @apply shadow-md transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)];
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, box-shadow;
 }
 
 .glass-panel-premium:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 20px 40px rgba(30, 46, 48, 0.12), 0 0 25px rgba(30, 46, 48, 0.05);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* Keyframes for Floating blobs */
@@ -195,9 +199,8 @@
 /* Animated Dark Gradient Mesh Background */
 .bg-mesh {
   background: var(--bg-mesh-1), var(--bg-mesh-2);
-  background-size: 200% 200%;
-  animation: gradient-mesh 20s ease infinite;
-  @apply transition-all duration-300;
+  background-size: 100% 100%;
+  transition: background-color 0.3s ease;
 }
 
 /* Gold pill buttons matching image */

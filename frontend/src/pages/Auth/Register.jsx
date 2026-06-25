@@ -40,7 +40,7 @@ export default function Register() {
   return (
     <div className="flex justify-center items-center py-6">
       <div className="w-full max-w-lg glass-panel p-8 space-y-6">
-        
+
         <div className="text-center space-y-2">
           <h2 className="font-serif text-2xl font-light tracking-tight text-theme-card-title">Create Student Account</h2>
           <p className="text-theme-muted text-base uppercase tracking-wider">Fill out the academic details below</p>
@@ -171,19 +171,20 @@ export default function Register() {
               {loading ? (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--btn-text)] border-t-transparent"></div>
               ) : (
-                'Create Account & Send OTP'
+                'Create Account'
               )}
             </button>
           </div>
         </form>
 
-        <div className="text-center pt-2 border-t border-theme-border">
-          <p className="text-base text-theme-muted">
-            Already have an account?{' '}
-            <Link to="/login" className="text-theme-title font-bold hover:underline">
-              Sign in
-            </Link>
-          </p>
+        <div className="text-center pt-4 border-t border-theme-border mt-4">
+          <p className="text-base text-theme-muted mb-3">Already have an account?</p>
+          <Link
+            to="/login"
+            className="w-full btn-outline-gold py-3.5 flex items-center justify-center gap-2 font-bold transition-all text-xs"
+          >
+            Sign in
+          </Link>
         </div>
       </div>
     </div>
